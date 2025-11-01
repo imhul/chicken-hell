@@ -7,13 +7,18 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
 import "github-markdown-css/github-markdown.css"
+// tauri
+import { invoke } from '@tauri-apps/api/core'
 
 const Home = () => {
     return (
-        <div className="relative">
+        <div className="relative" onClick={() => {
+            invoke('greet', { name: 'Chicken' })
+            console.info('Invoked greet command')
+        }}>
             <div className="home-bg z-1 fixed min-h-screen w-full" />
             <div className="home-logo fixed z-3 right-[3%] top-[100px]">
-                <img src="assets/chicken-hell-logo.png" alt="Chicken Hell Logo" width={420} />
+                <img src="/assets/chicken-hell-logo.png" alt="Chicken Hell Logo" width={420} />
             </div>
             <div className="to-bottom absolute z-5 flex items-center justify-center w-full" title="Scroll to bottom">
                 <a href="#bottom-content">
