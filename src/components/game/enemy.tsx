@@ -109,6 +109,7 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
             && (idleSFXCount >= 0)) {
             attackSFX.play()
             setAudioAction("playAttackSFX")
+            // TODO: play each file to end instead of stopping all sounds
         } else {
             Howler.stop()
             setAudioAction("stopAttackSFX")

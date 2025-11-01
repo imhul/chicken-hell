@@ -8,14 +8,18 @@ import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
 import "github-markdown-css/github-markdown.css"
 // tauri
-import { invoke } from '@tauri-apps/api/core'
+// import { invoke } from '@tauri-apps/api/core'
 
 const Home = () => {
     return (
-        <div className="relative" onClick={() => {
-            invoke('greet', { name: 'Chicken' })
-            console.info('Invoked greet command')
-        }}>
+        <div
+            className="relative"
+        // onClick={() => {
+        //     invoke('greet', { name: 'Chicken' }).then((msg) => {
+        //         console.log(msg)
+        //     })
+        // }}
+        >
             <div className="home-bg z-1 fixed min-h-screen w-full" />
             <div className="home-logo fixed z-3 right-[3%] top-[100px]">
                 <img src="/assets/chicken-hell-logo.png" alt="Chicken Hell Logo" width={420} />
