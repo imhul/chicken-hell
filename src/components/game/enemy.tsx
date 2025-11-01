@@ -109,7 +109,6 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
             && (idleSFXCount >= 0)) {
             attackSFX.play()
             setAudioAction("playAttackSFX")
-            // TODO: play each file to end instead of stopping all sounds
         } else {
             Howler.stop()
             setAudioAction("stopAttackSFX")
@@ -186,14 +185,13 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
             setState(runState)
 
             const chanceOfClucking = getChanceOfClucking()
-            if ((idleSFXCount < (maxEnemySoundsAtOnce + 1))
-                && (Math.random() < chanceOfClucking)
-                && (idleSFXCount >= 0)) {
+            if ((idleSFXCount <= maxEnemySoundsAtOnce)
+                && (Math.random() < chanceOfClucking)) {
                 idleSFX.play()
                 setAudioAction("playIdleSFX")
+                console.info("Enemy cluck! 🐔", idleSFXCount, chanceOfClucking)
             } else {
-                Howler.stop()
-                setAudioAction("stopIdleSFX")
+                idleSFX.stop() // Howler.stop()
             }
 
             let angle = getRandomInt(0, 360, seed) * (Math.PI / 180)
@@ -309,14 +307,10 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
         }
     }, [isHovered])
 
-    // useEffect(() => {
-
-    // }, [idleSFXCount])
-
     useEffect(() => {
-        idleSFX.volume((soundLevel ?? 50) / 100 * zoom)
+        idleSFX.volume((soundLevel ?? 50) / 100 * zoom / idleSFXCount)
         attackSFX.volume((soundLevel ?? 50) / 100 * zoom)
-    }, [soundLevel, zoom])
+    }, [soundLevel, zoom, idleSFXCount])
 
     return (textures && item && ref.current) ? (
         <pixiAnimatedSprite

@@ -89,6 +89,7 @@ export type AudioSlice = {
 
 export type HeroSlice = all.game.Hero & HeroActions
 export type HeroActions = {
+    resetHero: () => void
     setHeroName: (name: string) => void
     setHeroAction: (action: all.game.HeroState) => void
     setHeroPosition: (position: all.game.Position) => void

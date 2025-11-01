@@ -137,16 +137,18 @@ const Settings = () => {
                                     disabled={paused && isGameInit}
                                 />
                             </li>
-                            <li className="mb-4">
-                                <Button
-                                    size="lg"
-                                    onClick={() => generate()}
-                                >
-                                    <span className="text-gray-950 flex items-center gap-4 text-2xl">
-                                        <WandSparkles className="size-6" /> Generate
-                                    </span>
-                                </Button>
-                            </li>
+                            {!(paused && isGameInit) && (
+                                <li className="mb-4">
+                                    <Button
+                                        size="lg"
+                                        onClick={() => generate()}
+                                    >
+                                        <span className="text-gray-950 flex items-center gap-4 text-2xl">
+                                            <WandSparkles className="size-6" /> Generate
+                                        </span>
+                                    </Button>
+                                </li>
+                            )}
                         </ol>
                     </CardContent>
                 </Card>

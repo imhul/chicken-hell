@@ -67,7 +67,7 @@ export const initState = {
     },
 }
 
-export const createGameSlice: all.store.CreateGameSliceType = (set) => ({
+export const createGameSlice: all.store.CreateGameSliceType = (set, get) => ({
     ...initState,
     setGameAction: (action, payload) => {
         switch (action) {
@@ -82,9 +82,11 @@ export const createGameSlice: all.store.CreateGameSliceType = (set) => ({
                 break
             case "restart":
                 set(initState)
+                get().resetHero()
                 break
             case "exit":
-                set({ gameOver: true, paused: true })
+                set({ ...initState, gameOver: true, paused: true })
+                get().resetHero()
                 break
             case "resize":
                 set({ gameSize: payload })

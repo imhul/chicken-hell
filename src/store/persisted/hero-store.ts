@@ -42,6 +42,7 @@ const initHeroState: all.game.HeroEntity = {
 
 export const createHeroSlice: all.store.CreateHeroSliceType = (set) => ({
     hero: initHeroState,
+    resetHero: () => set(() => ({ hero: initHeroState })),
     setHeroAction: (state: all.game.HeroState) =>
         set((s) => ({ hero: { ...s.hero, state } })),
     setHeroName: (name: string) =>
