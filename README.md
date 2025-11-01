@@ -1,4 +1,4 @@
-# React + Pixi.js + Zustand Browser Game ![version](https://img.shields.io/badge/version-0.8.9-brightgreen`)
+# Tauri 2 + React 19 + Pixi.js + Zustand Browser Game ![version](https://img.shields.io/badge/version-0.8.9-brightgreen`)
 
 <p align="center">
   <img src="public/assets/chicken-hell-logo.png" width="400" />
