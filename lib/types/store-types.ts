@@ -80,10 +80,21 @@ export type GameSlice = {
     ) => void
 }
 
-export type AudioAction = "playIdleSFX" | "stopIdleSFX" | "playAttackSFX" | "stopAttackSFX"
+export type AudioAction =
+    "setIdleSFXStarted"
+    | "setAttackSFXStarted"
+    | "setAmbientSFXStarted"
+    | "setFireSFXStarted"
+    | "stopIdleSFX"
+    | "stopAttackSFX"
+    | "stopAmbientSFX"
+    | "stopFireSFX"
 export type AudioSlice = {
-    idleSFXCount: number
-    attackSFXCount: number
+    idleSFXStarted: boolean,
+    attackSFXStarted: boolean,
+    ambientSFXStarted: boolean,
+    fireSFXStarted: boolean,
+    resetAudio: () => void
     setAudioAction: (action: AudioAction, payload?: AudioActionPayload) => void
 }
 
@@ -120,6 +131,7 @@ export type UISlice = {
     showHeroActionMenu: boolean
     showEnemyProgress: boolean
     isDev: () => boolean
+    resetUI: () => void
     setDev: (id: string | boolean) => void
 }
 

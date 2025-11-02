@@ -1,32 +1,39 @@
 
 export const initState = {
-    idleSFXCount: 0,
-    attackSFXCount: 0,
+    idleSFXStarted: false,
+    attackSFXStarted: false,
+    ambientSFXStarted: false,
+    fireSFXStarted: false,
 }
 
 export const createAudioSlice: all.store.CreateAudioSliceType = (set, get) => ({
     ...initState,
+    resetAudio: () => set(() => ({ ...initState })),
     setAudioAction: (action, payload) => {
         switch (action) {
-            case "playIdleSFX":
-                set((s) => ({
-                    idleSFXCount: s.idleSFXCount + 1,
-                }))
+            case "setIdleSFXStarted":
+                set({ idleSFXStarted: true })
                 break
             case "stopIdleSFX":
-                set((s) => ({
-                    idleSFXCount: s.idleSFXCount > 0 ? s.idleSFXCount - 1 : 0,
-                }))
+                set({ idleSFXStarted: false })
                 break
-            case "playAttackSFX":
-                set((s) => ({
-                    attackSFXCount: s.attackSFXCount + 1,
-                }))
+            case "setAttackSFXStarted":
+                set({ attackSFXStarted: true })
                 break
             case "stopAttackSFX":
-                set((s) => ({
-                    attackSFXCount: s.attackSFXCount > 0 ? s.attackSFXCount - 1 : 0,
-                }))
+                set({ attackSFXStarted: false })
+                break
+            case "setAmbientSFXStarted":
+                set({ ambientSFXStarted: true })
+                break
+            case "stopAmbientSFX":
+                set({ ambientSFXStarted: false })
+                break
+            case "setFireSFXStarted":
+                set({ fireSFXStarted: true })
+                break
+            case "stopFireSFX":
+                set({ fireSFXStarted: false })
                 break
         }
     }

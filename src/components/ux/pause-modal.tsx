@@ -1,6 +1,7 @@
 import Settings from "@components/ux/settings"
 import {
     Dialog,
+    DialogClose,
     DialogTitle,
     DialogHeader,
     DialogContent,
@@ -10,6 +11,7 @@ import {
 const PauseModal = ({ open }: { open: boolean }) => {
     return (
         <Dialog open={open}>
+            <DialogClose className="hidden" aria-label="Close" />
             <DialogContent className="max-w-6xl p-10">
                 <DialogHeader>
                     <DialogTitle>Pause</DialogTitle>

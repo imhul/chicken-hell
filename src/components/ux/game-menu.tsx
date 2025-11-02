@@ -1,6 +1,5 @@
-import * as React from "react"
 // store
-import { usePersistedStore } from "@/store"
+import { useStore, usePersistedStore } from "@/store"
 // components
 import { Button } from "@components/ui/button"
 import {
@@ -19,6 +18,7 @@ import { gameMenu } from "@lib/config"
 type Store = all.store.PersistedStore
 
 function GameMenu() {
+    const goto = useStore((state: all.store.GlobalStore) => state.to)
     const paused = usePersistedStore((s: Store) => s.paused)
     const hero = usePersistedStore((s: Store) => s.hero)
     const setGameAction = usePersistedStore((s: Store) => s.setGameAction)
@@ -52,7 +52,10 @@ function GameMenu() {
                             "text-2xl p-4 pl-8 pr-8 dark:hover:text-primary hover:text-primary",
                             (item.id === "pause" && paused) ? "text-primary" : "",
                         )}
-                        onClick={() => setGameAction(item.id as all.game.GameAction)}
+                        onClick={() => {
+                            setGameAction(item.id as all.game.GameAction)
+                            if (item.id === "exit") goto("home")
+                        }}
                     >
                         {(item.id === "pause" && paused) ? "Continue" : item.label}
                     </DropdownMenuItem>

@@ -23,6 +23,7 @@ export const createUISlice: all.store.CreateUISliceType = (set, get) => ({
         get().showHeroActionMenu ||
         get().showEnemyProgress
     ),
+    resetUI: () => set(() => ({ ...initUIState })),
     setDev: (id: string | boolean) => set((s) => {
         switch (id) {
             case "object-hitboxes":

@@ -318,3 +318,7 @@ button:focus-visible {
     background-color: transparent !important;
     filter: none !important;
 }
+
+.hidden {
+    display: none !important;
+}

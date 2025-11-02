@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react"
 import { usePersistedStore } from "@/store"
 // hooks
 import { useBirthAnimation } from "@hooks/useBirth"
-import { useSFX } from "@hooks/useSFX"
 // pixi
 import { ColorMatrixFilter, Assets, AnimatedSprite, Rectangle } from "pixi.js"
 // components
@@ -25,9 +24,6 @@ import {
     defaultChunkSize,
     initialEnemyModel,
     maxBulletDistance,
-    maxEnemySoundsAtOnce,
-    maxChanceOfEnemyClucking,
-    minChanceOfEnemyClucking,
     maxDistanceFromEnemyBase,
 } from "@lib/config"
 
@@ -46,17 +42,13 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
     const [isBulletActive, setIsBulletActive] = useState(false)
     const [isHovered, setIsHover] = useState(false)
     // store
-    const idleSFXCount = usePersistedStore((s: Store) => s.idleSFXCount)
-    const soundLevel = usePersistedStore((s: Store) => s.preferences.soundLevel)
+    const attackSFXStarted = usePersistedStore((s: Store) => s.attackSFXStarted)
+    const idleSFXStarted = usePersistedStore((s: Store) => s.idleSFXStarted)
     const setAudioAction = usePersistedStore((s: Store) => s.setAudioAction)
     const setGameAction = usePersistedStore((s: Store) => s.setGameAction)
     const enemiesList = usePersistedStore((s: Store) => s.enemies)
     const paused = usePersistedStore((s: Store) => s.paused)
     const hero = usePersistedStore((s: Store) => s.hero)
-    const zoom = usePersistedStore((s: Store) => s.zoom)
-    // hooks
-    const idleSFX = useSFX("idle")
-    const attackSFX = useSFX("attack")
 
     useBirthAnimation(
         enemyRef as React.RefObject<AnimatedSprite>,
@@ -65,8 +57,6 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
     )
 
     const stopLoop = () => {
-        Howler.stop()
-        setAudioAction("stopIdleSFX")
         if (animationFrameRef.current) {
             cancelAnimationFrame(animationFrameRef.current)
             animationFrameRef.current = null
@@ -75,12 +65,6 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
             clearTimeout(idleTimeoutRef.current)
             idleTimeoutRef.current = null
         }
-    }
-
-    const getChanceOfClucking = () => {
-        const enemies = Object.values(enemiesList).reduce((acc, colony) => acc + colony.list.length, 0)
-        const chanceCalc = maxChanceOfEnemyClucking + (enemies - 1) * (minChanceOfEnemyClucking - maxChanceOfEnemyClucking) / (50 - 1)
-        return Number(chanceCalc.toFixed(5))
     }
 
     const attack = () => {
@@ -102,17 +86,7 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
             distance: maxBulletDistance,
         })
         setIsBulletActive(true)
-
-        const chanceOfClucking = getChanceOfClucking()
-        if ((idleSFXCount < (maxEnemySoundsAtOnce + 1))
-            && (Math.random() < chanceOfClucking)
-            && (idleSFXCount >= 0)) {
-            attackSFX.play()
-            setAudioAction("playAttackSFX")
-        } else {
-            Howler.stop()
-            setAudioAction("stopAttackSFX")
-        }
+        if (!attackSFXStarted) setAudioAction("setAttackSFXStarted")
 
         setTimeout(() => {
             if (hero.hp > 0.1) {
@@ -120,7 +94,6 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
                 attack()
             } else {
                 setState(idleState)
-                attackSFX.stop()
             }
         }, Math.floor(1000))
     }
@@ -178,21 +151,8 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
         const walkingPhase = getRandomInt(3000, 9000, seed)
 
         idleTimeoutRef.current = window.setTimeout(() => {
-            if (paused) {
-                Howler.stop()
-                return
-            }
+            if (paused) return
             setState(runState)
-
-            const chanceOfClucking = getChanceOfClucking()
-            if ((idleSFXCount <= maxEnemySoundsAtOnce)
-                && (Math.random() < chanceOfClucking)) {
-                idleSFX.play()
-                setAudioAction("playIdleSFX")
-                console.info("Enemy cluck! 🐔", idleSFXCount, chanceOfClucking)
-            } else {
-                idleSFX.stop() // Howler.stop()
-            }
 
             let angle = getRandomInt(0, 360, seed) * (Math.PI / 180)
             const turnsCount = getRandomInt(0, 4, seed)
@@ -202,12 +162,10 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
 
             let nextTurnIndex = 0
             const start = performance.now()
+            if (!idleSFXStarted) setAudioAction("setIdleSFXStarted")
 
             const step = (t: number) => {
-                if (paused || state !== runState) {
-                    Howler.stop()
-                    return
-                }
+                if (paused || state !== runState) return
                 const elapsed = t - start
 
                 if (elapsed < walkingPhase) {
@@ -306,11 +264,6 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
             setFilters([dropShadowFilter.enemy])
         }
     }, [isHovered])
-
-    useEffect(() => {
-        idleSFX.volume((soundLevel ?? 50) / 100 * zoom / idleSFXCount)
-        attackSFX.volume((soundLevel ?? 50) / 100 * zoom)
-    }, [soundLevel, zoom, idleSFXCount])
 
     return (textures && item && ref.current) ? (
         <pixiAnimatedSprite

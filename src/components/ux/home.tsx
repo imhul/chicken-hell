@@ -1,4 +1,9 @@
+import { useEffect } from "react"
 import readme from "@root/README.md?raw"
+// store
+import { usePersistedStore } from "@/store"
+// hooks
+import { useSFX } from "@hooks/useSFX"
 // components
 import { Rewind } from 'lucide-react'
 import FireCanvas from "@components/ux/fire"
@@ -7,10 +12,20 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import rehypeRaw from "rehype-raw"
 import "github-markdown-css/github-markdown.css"
-// tauri
 // import { invoke } from '@tauri-apps/api/core'
 
+type Store = all.store.PersistedStore
+
 const Home = () => {
+    const resetAudio = usePersistedStore((s: Store) => s.resetAudio)
+    const fireSFXStarted = usePersistedStore((s: Store) => s.fireSFXStarted)
+    const startSFX = useSFX()
+
+    useEffect(() => {
+        if (fireSFXStarted) resetAudio()
+        startSFX("fire")
+    }, [])
+
     return (
         <div
             className="relative"

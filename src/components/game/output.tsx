@@ -16,6 +16,8 @@ import {
     Graphics,
     Sprite,
 } from "pixi.js"
+// hooks
+import { useSFX } from "@hooks/useSFX"
 // config
 import { maxEnemyProgress } from "@lib/config"
 
@@ -31,6 +33,7 @@ export const Output = () => {
     const enemiesList = usePersistedStore((s: Store) => s.enemies)
     const showCharts = usePersistedStore((s: Store) => s.showCharts)
     const preferences = usePersistedStore((s: Store) => s.preferences)
+    const setAudioAction = usePersistedStore((s: Store) => s.setAudioAction)
     const showEnemyProgress = usePersistedStore((s: Store) => s.showEnemyProgress)
     // state
     const [enemiesLength, setEnemiesLength] = useState(0)
@@ -42,6 +45,13 @@ export const Output = () => {
         Graphics,
         Sprite,
     })
+
+    const startSFX = useSFX()
+
+    useEffect(() => {
+        setAudioAction("stopFireSFX")
+        startSFX("ambient")
+    }, [])
 
     useEffect(() => {
         if (enemiesList) {
