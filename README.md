@@ -1,7 +1,7 @@
 # Tauri 2 + React 19 + Pixi.js + Zustand Crossplatform Desktop Game ![version](https://img.shields.io/badge/version-0.8.10-brightgreen`)
 
 <p align="center">
-  <img src="public/assets/chicken-hell-logo.png" width="400" />
+  <img src="/public/assets/chicken-hell-logo.png" width="400" />
 </p>
 
 ## Technologies Used
