@@ -16,7 +16,7 @@
 - [ESLint](https://eslint.org)
 
 The decision to abandon [Svelte](https://svelte.dev) and [Next](https://nextjs.org) was made for obvious reasons,<br />
-because this project is not about **SSR**. The open source repository is on [GitHub](https://github.com/imhul/proto-mass-next).
+because this project is not about **SSR**. The open source repository is on [GitHub](https://github.com/imhul/chicken-hell).
 
 ## Story
 
