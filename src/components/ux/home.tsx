@@ -17,12 +17,15 @@ import "github-markdown-css/github-markdown.css"
 type Store = all.store.PersistedStore
 
 const Home = () => {
+    // store
     const resetAudio = usePersistedStore((s: Store) => s.resetAudio)
     const fireSFXStarted = usePersistedStore((s: Store) => s.fireSFXStarted)
+    const ambientSFXStarted = usePersistedStore((s: Store) => s.ambientSFXStarted)
+    // hooks
     const startSFX = useSFX()
 
     useEffect(() => {
-        if (fireSFXStarted) resetAudio()
+        if (fireSFXStarted || ambientSFXStarted) resetAudio()
         startSFX("fire")
     }, [])
 

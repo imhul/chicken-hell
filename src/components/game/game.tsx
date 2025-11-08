@@ -4,9 +4,9 @@ import { Viewport } from "pixi-viewport"
 // store
 import { usePersistedStore } from "@/store"
 // hooks
+import { useSFX } from "@hooks/useSFX"
 import { useGameLoop } from "@hooks/useGameLoop"
 // components
-// import PixiFire from "@/components/game/pixi-fire"
 import Hero from "@components/game/hero"
 import Enemies from "@/components/game/enemies"
 import Camera from "@components/game/camera"
@@ -18,12 +18,25 @@ import Bullets from "@components/game/bullets"
 type Store = all.store.PersistedStore
 
 const Game = () => {
+    // refs
+    const viewportRef = useRef<Viewport | null>(null)
+    // store
+    const ambientSFXStarted = usePersistedStore((s: Store) => s.ambientSFXStarted)
+    const fireSFXStarted = usePersistedStore((s: Store) => s.fireSFXStarted)
+    const gameSize = usePersistedStore((state: Store) => state.gameSize)
+    const resetAudio = usePersistedStore((s: Store) => s.resetAudio)
+    const scene = usePersistedStore((state: Store) => state.scene)
+    const paused = usePersistedStore((state: Store) => state.paused)
+    // hooks
     const { app } = useApplication()
     globalThis.__PIXI_APP__ = app
-    const viewportRef = useRef<Viewport | null>(null)
-    const gameSize = usePersistedStore((state: Store) => state.gameSize)
-    const scene = usePersistedStore((state: Store) => state.scene)
     useGameLoop({ ref: viewportRef })
+    const startSFX = useSFX()
+
+    useEffect(() => {
+        if (fireSFXStarted || ambientSFXStarted) resetAudio()
+        startSFX("ambient")
+    }, [])
 
     const resize = () => {
         if (!viewportRef.current) return
@@ -40,6 +53,8 @@ const Game = () => {
             window.removeEventListener("resize", resize)
         }
     }, [])
+
+    // console.info("Game mounted: ", { paused, ambientSFXStarted, fireSFXStarted })
 
     const renderGame = () => {
         switch (scene) {

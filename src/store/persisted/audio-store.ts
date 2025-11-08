@@ -1,3 +1,4 @@
+import { Howler } from "howler"
 
 export const initState = {
     idleSFXStarted: false,
@@ -8,7 +9,10 @@ export const initState = {
 
 export const createAudioSlice: all.store.CreateAudioSliceType = (set, get) => ({
     ...initState,
-    resetAudio: () => set(() => ({ ...initState })),
+    resetAudio: () => {
+        Howler.stop()
+        return set(() => ({ ...initState }))
+    },
     setAudioAction: (action, payload) => {
         switch (action) {
             case "setIdleSFXStarted":

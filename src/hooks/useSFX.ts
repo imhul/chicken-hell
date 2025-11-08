@@ -42,11 +42,11 @@ export const useSFX = () => {
 
     const soundLevel = usePersistedStore((s: Store) => s.preferences.soundLevel)
     const setAudioAction = usePersistedStore((s: Store) => s.setAudioAction)
+    const resetAudio = usePersistedStore((s: Store) => s.resetAudio)
     const route = useStore((s: all.store.GlobalStore) => s.route)
     const colonies = usePersistedStore((s: Store) => s.enemies)
     const paused = usePersistedStore((s: Store) => s.paused)
     const zoom = usePersistedStore((s: Store) => s.zoom) // from 0.5 to 2
-    // state
 
     useEffect(() => {
         Howler.autoUnlock = true
@@ -57,18 +57,27 @@ export const useSFX = () => {
     }, [soundLevel, zoom])
 
     useEffect(() => {
-        if (paused) Howler.stop()
-    }, [paused])
+        if (route === "game") {
+            if (paused) {
+                resetAudio()
+            }
+            if (!ambientSFXStarted) {
+                play("ambient")
+                console.info("Game paused, play ambient")
+            }
+        }
+    }, [paused, route])
 
     const play = (name: string) => {
         const randomIndex = Math.floor(Math.random() * soundMap[name].length)
         const enemies = Object.values(colonies).reduce((acc, colony) => acc + colony.list.length, 0)
+        const volume = soundLevel / 100
 
         const options = {
             autoUnlock: true,
             loop: ["fire", "ambient"].includes(name),
             html5: false,
-            volume: route === "game" ? soundLevel / 100 * zoom : soundLevel / 100,
+            volume: route === "game" ? volume * zoom : volume,
             src: [soundMap[name][randomIndex]],
             format: ['ogg'],
             onend: () => {
@@ -79,7 +88,7 @@ export const useSFX = () => {
             },
         }
 
-        console.info('play: ', { name, enemies, route, options, idleSFXStarted, attackSFXStarted, ambientSFXStarted, fireSFXStarted })
+        // console.info('play: ', { name, enemies, route, options, idleSFXStarted, attackSFXStarted, ambientSFXStarted, fireSFXStarted })
 
         if (name === "fire" && ((route === "game" && enemies > 0) || route === "home")) {
             const fireSFX = new Howl({
