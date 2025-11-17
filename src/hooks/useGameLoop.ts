@@ -133,6 +133,7 @@ export const useGameLoop = ({ ref }: all.game.UseGameLoopProps) => {
             ease: "easeOutSine",
         })
         // -------------------------------------------------------
+        // TODO: need to fix:
         hero.zIndex = (hero.zIndex < zindex.hero || newHeroPosition.y < zindex.hero)
             ? zindex.hero
             : Math.floor(newHeroPosition.y - heroSize / 2)
