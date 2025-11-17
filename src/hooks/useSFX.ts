@@ -42,14 +42,10 @@ const soundMap: Record<string, string[]> = {
     lvlup: [baseSpawn1, baseSpawn2, baseSpawn3], // temporary placeholder
 }
 
-/* docs: https://github.com/goldfire/howler.js#documentation */
-
 export const useSFX = () => {
     // store
     const ambientSFXStarted = usePersistedStore((s: Store) => s.ambientSFXStarted)
-    const attackSFXStarted = usePersistedStore((s: Store) => s.attackSFXStarted)
     const soundLevel = usePersistedStore((s: Store) => s.preferences.soundLevel)
-    const idleSFXStarted = usePersistedStore((s: Store) => s.idleSFXStarted)
     const setAudioAction = usePersistedStore((s: Store) => s.setAudioAction)
     const route = useStore((s: all.store.GlobalStore) => s.route)
     const enemies = usePersistedStore((s: Store) => s.enemies)
@@ -85,7 +81,7 @@ export const useSFX = () => {
             src: [soundMap[name][randomIndex]],
             format: ['ogg'],
             onend: () => {
-                console.info(`${name} finished!`)
+                // console.info(`${name} finished!`)
             },
             onplayerror: () => {
                 console.error('Error playing SFX: ', name)
@@ -145,9 +141,6 @@ export const useSFX = () => {
             activeClucking[name]++
             sfx.play()
             setAudioAction(name === "idle" ? "setIdleSFXStarted" : "setAttackSFXStarted")
-
-            console.info(`Enemy ${name}! 🐔`, { chanceOfSFX, activeClucking })
-
             setRandomLoop(name)
             return
         }

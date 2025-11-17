@@ -71,7 +71,7 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
     }
 
     const attack = () => {
-        console.info("Enemy attack! 👌")
+        // console.info("Enemy attack! 👌")
         if (!ref.current || !enemyRef.current || isBulletActive || hero.hp < 0.1) return
         const heroRef = ref.current.getChildByLabel("hero")
         if (!heroRef) return

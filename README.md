@@ -1,4 +1,4 @@
-# Tauri 2 + React 19 + Pixi.js + Zustand Crossplatform Desktop Game ![version](https://img.shields.io/badge/version-0.8.10-brightgreen`)
+# Tauri 2 + React 19 + Pixi.js + Zustand Crossplatform Desktop Game ![version](https://img.shields.io/badge/version-0.8.11-brightgreen`)
 
 <p align="center">
   <img src="/public/assets/chicken-hell-logo.png" width="400" />
@@ -6,7 +6,7 @@
 
 ## Technologies Used
 
-- [Tauri 2](https://tauri.app)
+- [Tauri](https://tauri.app) v.2
 - [React](https://reactjs.org) 19.2.0
 - [Zustand](https://zustand.docs.pmnd.rs/) 5.0.8
 - [PixiJS](https://pixijs.com) 8.14.0
@@ -40,9 +40,9 @@ Does he stand a chance?
 - [x] Implement object collisions
 - [x] Implement [pixi-filters](https://www.npmjs.com/package/pixi-filters)
 - [x] Implement [Tauri](https://tauri.app)
+- [x] Implement [howler.js](https://www.npmjs.com/package/howler)
 - [ ] Add zIndex reordering
 - [ ] Add fight/die mechanics, including bullets, explosions, damage and health
-- [ ] Implement [howler.js](https://www.npmjs.com/package/howler)
 - [ ] Implement map chunk generation
 - [ ] Implement save/load functionality
 

@@ -73,7 +73,7 @@ const Bullet = ({
                 }
             }
         } else if (owner === "enemy") {
-            console.info("hero take damage!")
+            // console.info("hero take damage!")
         }
     }
 
