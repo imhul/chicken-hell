@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useRef } from "react"
 import { Application, useExtend } from "@pixi/react"
 // store
 import { usePersistedStore } from "@/store"
@@ -28,12 +28,10 @@ export const Output = () => {
     const paused = usePersistedStore((s: Store) => s.paused)
     const showFPS = usePersistedStore((s: Store) => s.showFPS)
     const isGameInit = usePersistedStore((s: Store) => s.init)
-    const enemiesList = usePersistedStore((s: Store) => s.enemies)
+    const enemies = usePersistedStore((s: Store) => s.enemies)
     const showCharts = usePersistedStore((s: Store) => s.showCharts)
     const preferences = usePersistedStore((s: Store) => s.preferences)
     const showEnemyProgress = usePersistedStore((s: Store) => s.showEnemyProgress)
-    // state
-    const [enemiesLength, setEnemiesLength] = useState(0)
 
     useExtend({
         AnimatedSprite,
@@ -43,19 +41,12 @@ export const Output = () => {
         Sprite,
     })
 
-    useEffect(() => {
-        if (enemiesList) {
-            const total = Object.values(enemiesList).reduce((acc, enemies) => acc + enemies.list?.length, 0)
-            setEnemiesLength(total)
-        }
-    }, [enemiesList])
-
     return (
         <div ref={parentRef} className="game-container">
             {isGameInit ? (<>
-                {showEnemyProgress && (<ProgressBar min={0} max={maxEnemyProgress} current={enemiesLength} />)}
+                {showEnemyProgress && (<ProgressBar min={0} max={maxEnemyProgress} current={enemies} />)}
                 {showFPS && (<DevFPS />)}
-                {showCharts && (<DevChart currentValue={enemiesLength} />)}
+                {showCharts && (<DevChart currentValue={enemies} />)}
                 <Application resizeTo={parentRef} antialias={preferences.antialias} autoDensity={true} >
                     <Game />
                 </Application>

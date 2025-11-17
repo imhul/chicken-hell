@@ -22,7 +22,7 @@ const EnemiesColony = ({ ref, colony }: all.game.ColonyProps) => {
     // store
     const isDev = usePersistedStore((s: Store) => s.isDev)
     const paused = usePersistedStore((s: Store) => s.paused)
-    const enemiesList = usePersistedStore((s: Store) => s.enemies)
+    const colonies = usePersistedStore((s: Store) => s.colonies)
     const setGameAction = usePersistedStore(
         (state: Store) => state.setGameAction
     )
@@ -71,7 +71,7 @@ const EnemiesColony = ({ ref, colony }: all.game.ColonyProps) => {
             const pauseToNextBirth = enemySpawnMatrix[nextCount]
 
             if (pauseToNextBirth) {
-                const currentColony = enemiesList[colony.uid]
+                const currentColony = colonies[colony.uid]
                 const dirty = currentColony ? currentColony.dirty : false
                 const timer = setTimeout(() => {
                     const base = {
@@ -111,10 +111,10 @@ const EnemiesColony = ({ ref, colony }: all.game.ColonyProps) => {
                 return () => clearTimeout(timer)
             }
         }
-    }, [paused, enemies, colony, setGameAction, enemiesList])
+    }, [paused, enemies, colony, setGameAction, colonies])
 
     useEffect(() => {
-        const colonyData = enemiesList[colony.uid]
+        const colonyData = colonies[colony.uid]
 
         if (!colonyData) {
             setEnemies([])
@@ -128,9 +128,9 @@ const EnemiesColony = ({ ref, colony }: all.game.ColonyProps) => {
         if (list.length > 0) {
             setBasePos(list[0].base)
         }
-    }, [enemiesList, colony])
+    }, [colonies, colony])
 
-    const colonyData = enemiesList[colony.uid]
+    const colonyData = colonies[colony.uid]
 
     if (!colonyData) {
         return null

@@ -13,15 +13,9 @@ type Store = all.store.PersistedStore
 const Enemies = ({ ref }: all.game.EnemiesProps) => {
     const [colonies, setColonies] = useState<all.game.ColonyEntity[]>([])
     // store
-    const isDev = usePersistedStore(
-        (state: Store) => state.isDev
-    )
-    const paused = usePersistedStore(
-        (state: Store) => state.paused
-    )
-    const enemiesList = usePersistedStore(
-        (state: Store) => state.enemies
-    )
+    const isDev = usePersistedStore((s: Store) => s.isDev)
+    const paused = usePersistedStore((s: Store) => s.paused)
+    const enemiesList = usePersistedStore((s: Store) => s.colonies)
 
     useEffect(() => {
         if (paused) return

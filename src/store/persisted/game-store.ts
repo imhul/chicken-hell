@@ -19,7 +19,8 @@ export const initState = {
     seed: undefined,
     worldName: '',
     heroName: '',
-    enemies: {},
+    enemies: 0,
+    colonies: {},
     bullets: [] as all.game.BulletEntity[],
     preferences: {
         antialias: true,
@@ -129,13 +130,13 @@ export const createGameSlice: all.store.CreateGameSliceType = (set, get) => ({
             case "setColonyState":
                 const { uid, angry } = payload
                 set((s) => ({
-                    enemies: {
-                        ...s.enemies,
+                    colonies: {
+                        ...s.colonies,
                         [uid]: {
-                            ...s.enemies[uid],
+                            ...s.colonies[uid],
                             angry,
                             lastAttackTimestamp: performance.now(),
-                            list: s.enemies[uid]?.list.map((enemy) => ({
+                            list: s.colonies[uid]?.list.map((enemy) => ({
                                 ...enemy,
                                 state: angry ? "angry" : enemy.state,
                             })) || [],
@@ -145,12 +146,12 @@ export const createGameSlice: all.store.CreateGameSliceType = (set, get) => ({
                 break
             case "setEnemies":
                 set((s) => ({
-                    enemies: {
-                        ...s.enemies,
+                    colonies: {
+                        ...s.colonies,
                         [payload.colonyUid]: {
                             ...initialBaseModel,
                             list: [
-                                ...(s.enemies[payload.colonyUid]?.list || []),
+                                ...(s.colonies[payload.colonyUid]?.list || []),
                                 payload.newEnemy,
                             ],
                             dirty: true,
@@ -158,15 +159,16 @@ export const createGameSlice: all.store.CreateGameSliceType = (set, get) => ({
                             lastAttackTimestamp: 0,
                         },
                     },
+                    enemies: Object.values(s.colonies).reduce((acc, colony) => acc + colony.list.length, 0),
                 }))
                 break
             case "updateEnemy":
                 set((s) => ({
-                    enemies: {
-                        ...s.enemies,
+                    colonies: {
+                        ...s.colonies,
                         [payload.colony.uid]: {
-                            ...s.enemies[payload.colony.uid],
-                            list: s.enemies[payload.colony.uid].list.map((enemy) =>
+                            ...s.colonies[payload.colony.uid],
+                            list: s.colonies[payload.colony.uid].list.map((enemy) =>
                                 enemy.uid === payload.uid ? payload : enemy
                             ),
                         },
@@ -175,11 +177,11 @@ export const createGameSlice: all.store.CreateGameSliceType = (set, get) => ({
                 break
             case "removeEnemy":
                 set((s) => ({
-                    enemies: {
-                        ...s.enemies,
+                    colonies: {
+                        ...s.colonies,
                         [payload.colony.uid]: {
-                            ...s.enemies[payload.colony.uid],
-                            list: s.enemies[payload.colony.uid].list.filter(
+                            ...s.colonies[payload.colony.uid],
+                            list: s.colonies[payload.colony.uid].list.filter(
                                 (enemy) => enemy.uid !== payload.uid
                             ),
                         },
@@ -188,9 +190,9 @@ export const createGameSlice: all.store.CreateGameSliceType = (set, get) => ({
                 break
             case "removeColony":
                 set((s) => {
-                    const newEnemies = { ...s.enemies }
-                    delete newEnemies[payload.uid]
-                    return { enemies: newEnemies }
+                    const newColonies = { ...s.colonies }
+                    delete newColonies[payload.uid]
+                    return { colonies: newColonies }
                 })
         }
     },

@@ -5,6 +5,7 @@ import { useStore, usePersistedStore } from "@/store"
 import { Howl, Howler } from "howler"
 // sounds
 import fire from "/assets/sounds/fire.ogg"
+import ambient from "/assets/sounds/ambient.ogg"
 import Idle1 from "/assets/sounds/enemy-idle-01.ogg"
 import Idle2 from "/assets/sounds/enemy-idle-02.ogg"
 import Idle3 from "/assets/sounds/enemy-idle-03.ogg"
@@ -26,7 +27,7 @@ type Store = all.store.PersistedStore
 const soundMap: Record<string, string[]> = {
     idle: [Idle1, Idle2, Idle3],
     attack: [attack1, attack2, attack3],
-    ambient: [""],
+    ambient: [ambient],
     fire: [fire],
     baseSpawn: [baseSpawn1, baseSpawn2, baseSpawn3],
 }
@@ -44,7 +45,7 @@ export const useSFX = () => {
     const setAudioAction = usePersistedStore((s: Store) => s.setAudioAction)
     const resetAudio = usePersistedStore((s: Store) => s.resetAudio)
     const route = useStore((s: all.store.GlobalStore) => s.route)
-    const colonies = usePersistedStore((s: Store) => s.enemies)
+    const enemies = usePersistedStore((s: Store) => s.enemies)
     const paused = usePersistedStore((s: Store) => s.paused)
     const zoom = usePersistedStore((s: Store) => s.zoom) // from 0.5 to 2
 
@@ -56,21 +57,8 @@ export const useSFX = () => {
         Howler.volume(soundLevel / 100 * zoom)
     }, [soundLevel, zoom])
 
-    useEffect(() => {
-        if (route === "game") {
-            if (paused) {
-                resetAudio()
-            }
-            if (!ambientSFXStarted) {
-                play("ambient")
-                console.info("Game paused, play ambient")
-            }
-        }
-    }, [paused, route])
-
     const play = (name: string) => {
         const randomIndex = Math.floor(Math.random() * soundMap[name].length)
-        const enemies = Object.values(colonies).reduce((acc, colony) => acc + colony.list.length, 0)
         const volume = soundLevel / 100
 
         const options = {
@@ -104,7 +92,7 @@ export const useSFX = () => {
             console.info("Fire SFX started!")
         }
 
-        if (route === "game" && !ambientSFXStarted && name === "ambient") {
+        if (!ambientSFXStarted && name === "ambient") {
             const ambientSFX = new Howl({
                 ...options,
                 onplayerror: function () {
@@ -115,7 +103,7 @@ export const useSFX = () => {
             })
             ambientSFX.play()
             setAudioAction("setAmbientSFXStarted")
-            console.info("Ambient SFX started!")
+            console.info("Ambient SFX started! Options: ", options)
         }
 
         if (name === "idle" || name === "attack") {

@@ -11,6 +11,7 @@ export const createAudioSlice: all.store.CreateAudioSliceType = (set, get) => ({
     ...initState,
     resetAudio: () => {
         Howler.stop()
+        // console.info("AudioStore: reset audio")
         return set(() => ({ ...initState }))
     },
     setAudioAction: (action, payload) => {

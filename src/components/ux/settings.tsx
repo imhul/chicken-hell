@@ -1,4 +1,6 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
+// hooks
+import { useSFX } from "@hooks/useSFX"
 // components
 import KeyBindingEditor from "@components/ux/key-binding-editor"
 import ThemeToggle from "@components/ux/theme-toggle"
@@ -46,9 +48,19 @@ const Settings = () => {
     const isGameInit = usePersistedStore((s: Store) => s.init)
     const heroName = usePersistedStore((s: Store) => s.heroName)
     const worldName = usePersistedStore((s: Store) => s.worldName)
+    const resetAudio = usePersistedStore((s: Store) => s.resetAudio)
     const goto = useStore((state: all.store.GlobalStore) => state.to)
     const preferences = usePersistedStore((s: Store) => s.preferences)
     const setGameAction = usePersistedStore((s: Store) => s.setGameAction)
+    const fireSFXStarted = usePersistedStore((s: Store) => s.fireSFXStarted)
+    const ambientSFXStarted = usePersistedStore((s: Store) => s.ambientSFXStarted)
+    // hooks
+    const startSFX = useSFX()
+
+    useEffect(() => {
+        if (fireSFXStarted || ambientSFXStarted) resetAudio()
+        startSFX("ambient")
+    }, [])
 
     const onSeedChange = (e: all.react.ChangeEvent<HTMLInputElement>) => { setGameAction("setSeed", String(e.target.value)) }
 

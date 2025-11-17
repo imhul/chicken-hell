@@ -18,7 +18,7 @@ const EnemyBase = ({ isBirth, isDeath, uid, pos }: all.game.EnemyBaseProps) => {
     const [textures, setTextures] = useState<all.pixi.AnimatedSpriteFrames | null>(null)
     // store
     const paused = usePersistedStore((s: Store) => s.paused)
-    const enemiesList = usePersistedStore((s: Store) => s.enemies)
+    const enemiesList = usePersistedStore((s: Store) => s.colonies)
     const setGameAction = usePersistedStore((s: Store) => s.setGameAction)
 
     useBirthAnimation(

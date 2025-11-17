@@ -46,7 +46,7 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
     const idleSFXStarted = usePersistedStore((s: Store) => s.idleSFXStarted)
     const setAudioAction = usePersistedStore((s: Store) => s.setAudioAction)
     const setGameAction = usePersistedStore((s: Store) => s.setGameAction)
-    const enemiesList = usePersistedStore((s: Store) => s.enemies)
+    const enemiesList = usePersistedStore((s: Store) => s.colonies)
     const paused = usePersistedStore((s: Store) => s.paused)
     const hero = usePersistedStore((s: Store) => s.hero)
 

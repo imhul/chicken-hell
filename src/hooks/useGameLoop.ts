@@ -25,7 +25,7 @@ export const useGameLoop = ({ ref }: all.game.UseGameLoopProps) => {
     const animationFrameRef = useRef<number | null>(null)
     const blockedDirections = useRef<Set<all.game.MovementDirection>>(new Set())
     // store
-    // const enemyColonies: all.store.Colonies = usePersistedStore((s: Store) => s.enemies)
+    // const enemyColonies: all.store.Colonies = usePersistedStore((s: Store) => s.colonies)
     const heroSnapshot = usePersistedStore((s: Store) => s.hero)
     const keyBindings = usePersistedStore((s: Store) => s.preferences.keyBindings)
     const water = usePersistedStore((s: Store) => s.water)

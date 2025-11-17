@@ -73,7 +73,8 @@ export type GameSlice = {
     startTimestamp: number
     preferences: Preferences
     bullets: all.game.BulletEntity[]
-    enemies: Colonies
+    enemies: number
+    colonies: Colonies
     setGameAction: (
         action: all.game.GameAction,
         payload?: GameActionPayload

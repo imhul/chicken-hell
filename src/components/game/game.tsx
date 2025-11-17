@@ -25,8 +25,8 @@ const Game = () => {
     const fireSFXStarted = usePersistedStore((s: Store) => s.fireSFXStarted)
     const gameSize = usePersistedStore((state: Store) => state.gameSize)
     const resetAudio = usePersistedStore((s: Store) => s.resetAudio)
-    const scene = usePersistedStore((state: Store) => state.scene)
     const paused = usePersistedStore((state: Store) => state.paused)
+    const scene = usePersistedStore((state: Store) => state.scene)
     // hooks
     const { app } = useApplication()
     globalThis.__PIXI_APP__ = app
@@ -34,9 +34,9 @@ const Game = () => {
     const startSFX = useSFX()
 
     useEffect(() => {
-        if (fireSFXStarted || ambientSFXStarted) resetAudio()
-        startSFX("ambient")
-    }, [])
+        fireSFXStarted && resetAudio()
+        !ambientSFXStarted && startSFX("ambient")
+    }, [paused])
 
     const resize = () => {
         if (!viewportRef.current) return
@@ -53,8 +53,6 @@ const Game = () => {
             window.removeEventListener("resize", resize)
         }
     }, [])
-
-    // console.info("Game mounted: ", { paused, ambientSFXStarted, fireSFXStarted })
 
     const renderGame = () => {
         switch (scene) {
