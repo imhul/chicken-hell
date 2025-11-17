@@ -84,13 +84,18 @@ export const createGameSlice: all.store.CreateGameSliceType = (set, get) => ({
             case "restart":
                 set(initState)
                 get().resetHero()
-                get().resetUI()
                 get().resetAudio()
                 break
             case "exit":
                 set({ ...initState, gameOver: true, paused: true })
-                get().resetHero()
                 get().resetUI()
+                get().resetHero()
+                get().resetAudio()
+                break
+            case "clearCache":
+                set(initState)
+                get().resetUI()
+                get().resetHero()
                 get().resetAudio()
                 break
             case "resize":
@@ -159,7 +164,7 @@ export const createGameSlice: all.store.CreateGameSliceType = (set, get) => ({
                             lastAttackTimestamp: 0,
                         },
                     },
-                    enemies: Object.values(s.colonies).reduce((acc, colony) => acc + colony.list.length, 0),
+                    enemies: Object.values(s.colonies).reduce((acc, colony) => acc + colony.list.length, 0) + 1,
                 }))
                 break
             case "updateEnemy":

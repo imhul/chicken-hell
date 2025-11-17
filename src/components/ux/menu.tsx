@@ -17,10 +17,11 @@ import { useStore, usePersistedStore } from "@/store"
 type Store = all.store.PersistedStore
 
 const Menu = () => {
-    const route = useStore((state: all.store.GlobalStore) => state.route)
     const paused = usePersistedStore((s: Store) => s.paused)
     const isGameInit = usePersistedStore((s: Store) => s.init)
+    const route = useStore((s: all.store.GlobalStore) => s.route)
     const setGameAction = usePersistedStore((s: Store) => s.setGameAction)
+    // styles
     const className = "data-[active=true]:text-primary" + " " +
         "hover:text-primary" + " " +
         "focus:text-primary" + " " +

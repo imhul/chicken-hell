@@ -2,7 +2,7 @@
 import { usePersistedStore } from "@/store"
 
 const DevDot = ({ x, y, width, height, ...props }: all.game.DevComponentProps) => {
-    const showDots = usePersistedStore((state: all.store.PersistedStore) => state.showDots)
+    const showDots = usePersistedStore((s: all.store.PersistedStore) => s.showDots)
 
     return showDots ? (
         <pixiGraphics

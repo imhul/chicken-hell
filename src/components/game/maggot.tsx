@@ -11,7 +11,7 @@ const Maggot = ({ texture, width, height, item }: all.game.MaggotProps) => {
     const [started, setStarted] = useState(false)
     const animationFrameRef = useRef<number | null>(null)
     const directionRef = useRef(item.direction)
-    const paused = usePersistedStore((state: all.store.PersistedStore) => state.paused)
+    const paused = usePersistedStore((s: all.store.PersistedStore) => s.paused)
 
     const scheduleTurn = () => {
         const pauseBeforeNextTurn = getRandomInt(5000, 15000)

@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react"
+// hooks
+import { useSFX } from "@hooks/useSFX"
 // store
 import { usePersistedStore } from "@/store"
 // components
@@ -15,7 +17,19 @@ const Enemies = ({ ref }: all.game.EnemiesProps) => {
     // store
     const isDev = usePersistedStore((s: Store) => s.isDev)
     const paused = usePersistedStore((s: Store) => s.paused)
+    const enemies = usePersistedStore((s: Store) => s.enemies)
     const enemiesList = usePersistedStore((s: Store) => s.colonies)
+    const fireSFXStarted = usePersistedStore((s: Store) => s.fireSFXStarted)
+    // hooks
+    const startSFX = useSFX()
+
+    useEffect(() => {
+        if (paused) return
+        if (!fireSFXStarted && enemies > 0) {
+            startSFX("fire")
+            startSFX("baseSpawn")
+        }
+    }, [enemies, paused, fireSFXStarted])
 
     useEffect(() => {
         if (paused) return
@@ -49,6 +63,7 @@ const Enemies = ({ ref }: all.game.EnemiesProps) => {
                         ...prev,
                         { id: prev.length + 1, uid: crypto.randomUUID() },
                     ])
+                    startSFX("baseSpawn")
                 }, pauseToNextBirth)
                 return () => clearTimeout(timer)
             }

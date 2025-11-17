@@ -248,6 +248,7 @@ export type Construction =
 export type Consumer = "hero" | "enemy" | "enemy-egg"
 export type GameAction =
     "setScene"
+    | "clearCache"
     | "setColonyState"
     | "removeBullet"
     | "addBullet"

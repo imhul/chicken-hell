@@ -8,16 +8,28 @@ import Menu from "@components/ux/menu"
 import Link from "@components/ux/link"
 import DevHeroActions from "@components/ux/dev-hero-actions"
 import DevMenu from "@/components/ux/dev-menu"
+// hooks
+import { useSFX } from "@hooks/useSFX"
 // store
 import { useStore, usePersistedStore } from "@/store"
+// utils
+import { toast } from "sonner"
 
 const Header = () => {
-    const route = useStore((state: all.store.GlobalStore) => state.route)
-    const showHeroActionMenu = usePersistedStore((state: all.store.PersistedStore) => state.showHeroActionMenu)
+    // store
+    const route = useStore((s: all.store.GlobalStore) => s.route)
+    const setGameAction = usePersistedStore((s: all.store.PersistedStore) => s.setGameAction)
+    const showHeroActionMenu = usePersistedStore((s: all.store.PersistedStore) => s.showHeroActionMenu)
+    // hooks
+    const startSFX = useSFX()
 
     const reload = async () => {
         await getCurrentWebview().clearAllBrowsingData().then(() => {
-            console.info("Cleared browsing data")
+            setGameAction("clearCache")
+            toast.success("Cleared!", {
+                description: "Store and all browsing data cleared!",
+            })
+            startSFX("fire")
         })
     }
 

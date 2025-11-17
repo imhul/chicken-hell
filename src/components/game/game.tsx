@@ -23,10 +23,10 @@ const Game = () => {
     // store
     const ambientSFXStarted = usePersistedStore((s: Store) => s.ambientSFXStarted)
     const fireSFXStarted = usePersistedStore((s: Store) => s.fireSFXStarted)
-    const gameSize = usePersistedStore((state: Store) => state.gameSize)
     const resetAudio = usePersistedStore((s: Store) => s.resetAudio)
-    const paused = usePersistedStore((state: Store) => state.paused)
-    const scene = usePersistedStore((state: Store) => state.scene)
+    const gameSize = usePersistedStore((s: Store) => s.gameSize)
+    const paused = usePersistedStore((s: Store) => s.paused)
+    const scene = usePersistedStore((s: Store) => s.scene)
     // hooks
     const { app } = useApplication()
     globalThis.__PIXI_APP__ = app

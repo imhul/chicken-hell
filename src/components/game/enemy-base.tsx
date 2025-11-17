@@ -12,7 +12,9 @@ import { dropShadowFilter } from "@lib/utils"
 type Store = all.store.PersistedStore
 
 const EnemyBase = ({ isBirth, isDeath, uid, pos }: all.game.EnemyBaseProps) => {
+    // refs
     const baseRef = useRef<all.pixi.AnimatedSprite | null>(null)
+    // state
     const [angry, setAngry] = useState<boolean>(false)
     const [size, setSize] = useState<all.game.BaseSize>({ width: 100, height: 100 })
     const [textures, setTextures] = useState<all.pixi.AnimatedSpriteFrames | null>(null)

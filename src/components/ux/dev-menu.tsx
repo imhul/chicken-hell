@@ -23,23 +23,23 @@ const DevMenu = () => {
     const setDev = usePersistedStore((s: Store) => s.setDev)
     const isDev = usePersistedStore((s: Store) => s.isDev)
     const showObjectHitboxes = usePersistedStore(
-        (state: Store) => state.showObjectHitboxes
+        (s: Store) => s.showObjectHitboxes
     )
     const showEnemyHitboxes = usePersistedStore(
-        (state: Store) => state.showEnemyHitboxes
+        (s: Store) => s.showEnemyHitboxes
     )
     const showHeroHitbox = usePersistedStore(
-        (state: Store) => state.showHeroHitbox
+        (s: Store) => s.showHeroHitbox
     )
     const showDots = usePersistedStore((s: Store) => s.showDots)
     const showFPS = usePersistedStore((s: Store) => s.showFPS)
     const isGodMode = usePersistedStore((s: Store) => s.isGodMode)
     const showCharts = usePersistedStore((s: Store) => s.showCharts)
     const showHeroActionMenu = usePersistedStore(
-        (state: Store) => state.showHeroActionMenu
+        (s: Store) => s.showHeroActionMenu
     )
     const showEnemyProgress = usePersistedStore(
-        (state: Store) => state.showEnemyProgress
+        (s: Store) => s.showEnemyProgress
     )
 
     const menu = devMenu.map((m) => {

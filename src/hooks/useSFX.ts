@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 // store
 import { useStore, usePersistedStore } from "@/store"
 // utils
@@ -18,6 +18,7 @@ import baseSpawn3 from "/assets/sounds/enemy-base-spawn-03.ogg"
 import short from "/assets/sounds/enemy-short-sound.ogg"
 // config
 import {
+    maxColoniesPerChunk,
     maxChanceOfEnemyClucking,
     minChanceOfEnemyClucking,
 } from "@lib/config"
@@ -30,6 +31,7 @@ const soundMap: Record<string, string[]> = {
     ambient: [ambient],
     fire: [fire],
     baseSpawn: [baseSpawn1, baseSpawn2, baseSpawn3],
+    short: [short],
 }
 
 /* docs: https://github.com/goldfire/howler.js#documentation */
@@ -38,15 +40,12 @@ export const useSFX = () => {
     // store
     const ambientSFXStarted = usePersistedStore((s: Store) => s.ambientSFXStarted)
     const attackSFXStarted = usePersistedStore((s: Store) => s.attackSFXStarted)
-    const idleSFXStarted = usePersistedStore((s: Store) => s.idleSFXStarted)
-    const fireSFXStarted = usePersistedStore((s: Store) => s.fireSFXStarted)
-
     const soundLevel = usePersistedStore((s: Store) => s.preferences.soundLevel)
+    const idleSFXStarted = usePersistedStore((s: Store) => s.idleSFXStarted)
     const setAudioAction = usePersistedStore((s: Store) => s.setAudioAction)
-    const resetAudio = usePersistedStore((s: Store) => s.resetAudio)
     const route = useStore((s: all.store.GlobalStore) => s.route)
+    const colonies = usePersistedStore((s: Store) => s.colonies)
     const enemies = usePersistedStore((s: Store) => s.enemies)
-    const paused = usePersistedStore((s: Store) => s.paused)
     const zoom = usePersistedStore((s: Store) => s.zoom) // from 0.5 to 2
 
     useEffect(() => {
@@ -89,7 +88,6 @@ export const useSFX = () => {
             })
             fireSFX.play()
             setAudioAction("setFireSFXStarted")
-            console.info("Fire SFX started!")
         }
 
         if (!ambientSFXStarted && name === "ambient") {
@@ -103,7 +101,6 @@ export const useSFX = () => {
             })
             ambientSFX.play()
             setAudioAction("setAmbientSFXStarted")
-            console.info("Ambient SFX started! Options: ", options)
         }
 
         if (name === "idle" || name === "attack") {
@@ -127,6 +124,11 @@ export const useSFX = () => {
                     console.info("Enemy cluck! 🐔", chanceOfSFX)
                 }
             }
+        }
+
+        if (name === "baseSpawn") {
+            const baseSpawnSFX = new Howl(options)
+            baseSpawnSFX.play()
         }
     }
 

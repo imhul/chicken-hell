@@ -18,7 +18,7 @@ import { gameMenu } from "@lib/config"
 type Store = all.store.PersistedStore
 
 function GameMenu() {
-    const goto = useStore((state: all.store.GlobalStore) => state.to)
+    const goto = useStore((s: all.store.GlobalStore) => s.to)
     const paused = usePersistedStore((s: Store) => s.paused)
     const hero = usePersistedStore((s: Store) => s.hero)
     const setGameAction = usePersistedStore((s: Store) => s.setGameAction)

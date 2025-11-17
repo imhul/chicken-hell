@@ -23,9 +23,7 @@ const EnemiesColony = ({ ref, colony }: all.game.ColonyProps) => {
     const isDev = usePersistedStore((s: Store) => s.isDev)
     const paused = usePersistedStore((s: Store) => s.paused)
     const colonies = usePersistedStore((s: Store) => s.colonies)
-    const setGameAction = usePersistedStore(
-        (state: Store) => state.setGameAction
-    )
+    const setGameAction = usePersistedStore((s: Store) => s.setGameAction)
     // state
     const [enemies, setEnemies] = useState<all.game.EnemyEntity[]>([])
     const [basePos, setBasePos] = useState<all.game.Position>({ x: 0, y: 0 })

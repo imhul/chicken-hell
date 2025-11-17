@@ -11,7 +11,7 @@ const Link = ({
     withChildren = false,
     ...props
 }: all.ui.LinkProps) => {
-    const goto = useStore((state: all.store.GlobalStore) => state.to)
+    const goto = useStore((s: all.store.GlobalStore) => s.to)
 
     return withChildren ? (
         <div onClick={() => goto(to)} {...props}>

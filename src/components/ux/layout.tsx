@@ -12,7 +12,7 @@ import Home from "@components/ux/home"
 import { Output as GameOutput } from "@components/game/output"
 
 const Layout = () => {
-    const route = useStore((state: all.store.GlobalStore) => state.route)
+    const route = useStore((s: all.store.GlobalStore) => s.route)
 
     useEffect(() => {
         getCurrentWindow().once('tauri://close-requested', async () => {
