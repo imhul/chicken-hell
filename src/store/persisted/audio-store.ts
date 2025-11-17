@@ -5,6 +5,7 @@ export const initState = {
     attackSFXStarted: false,
     ambientSFXStarted: false,
     fireSFXStarted: false,
+    lvlupSFXStarted: false,
 }
 
 export const createAudioSlice: all.store.CreateAudioSliceType = (set, get) => ({
@@ -39,6 +40,9 @@ export const createAudioSlice: all.store.CreateAudioSliceType = (set, get) => ({
                 break
             case "stopFireSFX":
                 set({ fireSFXStarted: false })
+                break
+            case "setLvlupSFXStarted":
+                set({ lvlupSFXStarted: true })
                 break
         }
     }

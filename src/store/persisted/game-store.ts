@@ -7,6 +7,7 @@ export const initState = {
     init: false,
     paused: false,
     gameOver: false,
+    isAttack: false,
     water: [],
     startTimestamp: 0,
     playTime: 0,
@@ -100,6 +101,9 @@ export const createGameSlice: all.store.CreateGameSliceType = (set, get) => ({
                 break
             case "resize":
                 set({ gameSize: payload })
+                break
+            case "setAttack":
+                set({ isAttack: payload })
                 break
             case "saveWater":
                 set({ water: payload })

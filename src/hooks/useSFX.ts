@@ -18,12 +18,19 @@ import baseSpawn3 from "/assets/sounds/enemy-base-spawn-03.ogg"
 import short from "/assets/sounds/enemy-short-sound.ogg"
 // config
 import {
-    maxColoniesPerChunk,
     maxChanceOfEnemyClucking,
     minChanceOfEnemyClucking,
 } from "@lib/config"
 
 type Store = all.store.PersistedStore
+
+const activeClucking: Record<string, number> = {
+    idle: 0,
+    attack: 0,
+}
+const MAX_CONCURRENT_SFX = 3
+const MIN_DELAY = 2000
+const MAX_DELAY = 10000
 
 const soundMap: Record<string, string[]> = {
     idle: [Idle1, Idle2, Idle3],
@@ -31,7 +38,8 @@ const soundMap: Record<string, string[]> = {
     ambient: [ambient],
     fire: [fire],
     baseSpawn: [baseSpawn1, baseSpawn2, baseSpawn3],
-    short: [short],
+    short: [short], // not used currently
+    lvlup: [baseSpawn1, baseSpawn2, baseSpawn3], // temporary placeholder
 }
 
 /* docs: https://github.com/goldfire/howler.js#documentation */
@@ -44,9 +52,10 @@ export const useSFX = () => {
     const idleSFXStarted = usePersistedStore((s: Store) => s.idleSFXStarted)
     const setAudioAction = usePersistedStore((s: Store) => s.setAudioAction)
     const route = useStore((s: all.store.GlobalStore) => s.route)
-    const colonies = usePersistedStore((s: Store) => s.colonies)
     const enemies = usePersistedStore((s: Store) => s.enemies)
+    const paused = usePersistedStore((s: Store) => s.paused)
     const zoom = usePersistedStore((s: Store) => s.zoom) // from 0.5 to 2
+    const init = usePersistedStore((s: Store) => s.init)
 
     useEffect(() => {
         Howler.autoUnlock = true
@@ -55,6 +64,14 @@ export const useSFX = () => {
     useEffect(() => {
         Howler.volume(soundLevel / 100 * zoom)
     }, [soundLevel, zoom])
+
+    const setRandomLoop = (name: string) => {
+        if (enemies === 0 || paused || !init) return
+        const delay = Math.random() * (MAX_DELAY - MIN_DELAY) + MIN_DELAY
+        setTimeout(() => {
+            play(name)
+        }, delay)
+    }
 
     const play = (name: string) => {
         const randomIndex = Math.floor(Math.random() * soundMap[name].length)
@@ -74,8 +91,6 @@ export const useSFX = () => {
                 console.error('Error playing SFX: ', name)
             },
         }
-
-        // console.info('play: ', { name, enemies, route, options, idleSFXStarted, attackSFXStarted, ambientSFXStarted, fireSFXStarted })
 
         if (name === "fire" && ((route === "game" && enemies > 0) || route === "home")) {
             const fireSFX = new Howl({
@@ -107,23 +122,34 @@ export const useSFX = () => {
             const chanceCalc = maxChanceOfEnemyClucking + (enemies - 1) * (minChanceOfEnemyClucking - maxChanceOfEnemyClucking) / (50 - 1)
             const chanceOfSFX = Number(chanceCalc.toFixed(5))
 
-            if (!attackSFXStarted && name === "attack") {
-                const attackSFX = new Howl(options)
-                if (Math.random() < chanceOfSFX) {
-                    attackSFX.play()
-                    setAudioAction("setAttackSFXStarted")
-                    console.info("Enemy attack! 🐔", chanceOfSFX)
-                }
+            if (Math.random() >= chanceOfSFX) {
+                setRandomLoop(name)
+                return
             }
 
-            if (!idleSFXStarted && name === "idle") {
-                const idleSFX = new Howl(options)
-                if (Math.random() < chanceOfSFX) {
-                    idleSFX.play()
-                    setAudioAction("setIdleSFXStarted")
-                    console.info("Enemy cluck! 🐔", chanceOfSFX)
-                }
+            if (activeClucking[name] >= MAX_CONCURRENT_SFX) {
+                setRandomLoop(name)
+                return
             }
+
+            const sfx = new Howl({
+                ...options,
+                onend: () => {
+                    activeClucking[name]--
+                },
+                onplayerror: () => {
+                    sfx.once('unlock', () => sfx.play())
+                }
+            })
+
+            activeClucking[name]++
+            sfx.play()
+            setAudioAction(name === "idle" ? "setIdleSFXStarted" : "setAttackSFXStarted")
+
+            console.info(`Enemy ${name}! 🐔`, { chanceOfSFX, activeClucking })
+
+            setRandomLoop(name)
+            return
         }
 
         if (name === "baseSpawn") {

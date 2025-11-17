@@ -75,6 +75,7 @@ export type GameSlice = {
     bullets: all.game.BulletEntity[]
     enemies: number
     colonies: Colonies
+    isAttack: boolean
     setGameAction: (
         action: all.game.GameAction,
         payload?: GameActionPayload
@@ -83,6 +84,7 @@ export type GameSlice = {
 
 export type AudioAction =
     "setIdleSFXStarted"
+    | "setLvlupSFXStarted"
     | "setAttackSFXStarted"
     | "setAmbientSFXStarted"
     | "setFireSFXStarted"
@@ -95,6 +97,7 @@ export type AudioSlice = {
     attackSFXStarted: boolean,
     ambientSFXStarted: boolean,
     fireSFXStarted: boolean,
+    lvlupSFXStarted: boolean,
     resetAudio: () => void
     setAudioAction: (action: AudioAction, payload?: AudioActionPayload) => void
 }

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 // store
 import { usePersistedStore } from "@/store"
 // hooks
+import { useSFX } from "@hooks/useSFX"
 import { useBirthAnimation } from "@hooks/useBirth"
 // pixi
 import { ColorMatrixFilter, Assets, AnimatedSprite, Rectangle } from "pixi.js"
@@ -10,7 +11,6 @@ import EnemyEgg from "@components/game/enemy-egg"
 import { ProgressBar } from "@pixi/ui"
 import CustomProgressBar from "@components/pixi/custom-progress-bar"
 // utils
-import { Howler } from "howler"
 import { getTextures, getRandomInt, dropShadowFilter } from "@lib/utils"
 // config
 import {
@@ -19,6 +19,7 @@ import {
     idleState,
     angryState,
     enemyScale,
+    lvlupState,
     bulletSpeed,
     bulletDamage,
     defaultChunkSize,
@@ -43,13 +44,15 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
     const [isHovered, setIsHover] = useState(false)
     // store
     const attackSFXStarted = usePersistedStore((s: Store) => s.attackSFXStarted)
+    const lvlupSFXStarted = usePersistedStore((s: Store) => s.lvlupSFXStarted)
     const idleSFXStarted = usePersistedStore((s: Store) => s.idleSFXStarted)
-    const setAudioAction = usePersistedStore((s: Store) => s.setAudioAction)
     const setGameAction = usePersistedStore((s: Store) => s.setGameAction)
     const enemiesList = usePersistedStore((s: Store) => s.colonies)
     const paused = usePersistedStore((s: Store) => s.paused)
     const hero = usePersistedStore((s: Store) => s.hero)
-
+    const init = usePersistedStore((s: Store) => s.init)
+    // hooks
+    const startSFX = useSFX()
     useBirthAnimation(
         enemyRef as React.RefObject<AnimatedSprite>,
         !!textures,
@@ -86,13 +89,13 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
             distance: maxBulletDistance,
         })
         setIsBulletActive(true)
-        if (!attackSFXStarted) setAudioAction("setAttackSFXStarted")
 
         setTimeout(() => {
             if (hero.hp > 0.1) {
                 setIsBulletActive(false)
                 attack()
             } else {
+                setGameAction("setAttack", false)
                 setState(idleState)
             }
         }, Math.floor(1000))
@@ -162,7 +165,6 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
 
             let nextTurnIndex = 0
             const start = performance.now()
-            if (!idleSFXStarted) setAudioAction("setIdleSFXStarted")
 
             const step = (t: number) => {
                 if (paused || state !== runState) return
@@ -227,6 +229,18 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
         }
         return stopLoop
     }, [state, textures, paused, hero.position.x, hero.position.y])
+
+    useEffect(() => {
+        if (paused || !init) return
+        if (state === angryState) {
+            setGameAction("setAttack", true)
+            if (!attackSFXStarted) startSFX("attack")
+        } else if (state === lvlupState) {
+            if (!lvlupSFXStarted) startSFX("lvlup")
+        } else {
+            if (!idleSFXStarted) startSFX("idle")
+        }
+    }, [paused, state, idleSFXStarted, attackSFXStarted, lvlupSFXStarted])
 
     useEffect(() => {
         if (!item?.colony) return
