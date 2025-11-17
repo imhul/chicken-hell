@@ -95,8 +95,7 @@ export type DevComponentProps = {
 }
 
 export interface EnemyEggProps {
-    uid: string
-    position: Position
+    item: EnemyEntity
     state: "jump" | "birth" | "death"
 }
 
@@ -126,6 +125,8 @@ export interface EnemyEntity extends BaseEntity {
     state: EnemyState
     colony: ColonyEntity
     damage: number
+    egg: boolean
+    queen: boolean
 }
 
 export interface ColonyEntity {

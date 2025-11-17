@@ -279,50 +279,48 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
         }
     }, [isHovered])
 
-    return (textures && item && ref.current) ? (
-        <pixiAnimatedSprite
-            textures={textures[idleState]}
-            ref={enemyRef}
-            anchor={0.5}
-            scale={enemyScale}
-            eventMode={"static"}
-            onPointerOver={() => setIsHover(true)}
-            onPointerOut={() => setIsHover(false)}
-            animationSpeed={state === idleState ? 0.08 : 0.18}
-            x={item.position.x}
-            y={item.position.y}
-            interactive={true}
-            hitArea={
-                new Rectangle(
-                    0,
-                    0,
-                    textures[idleState][0].width,
-                    textures[idleState][0].height
-                )
-            }
-            label={`enemy-${item.uid}`}
-            autoPlay
-            loop
-            filters={filters}
-        >
-            {enemyRef.current ? (
-                <EnemyEgg uid={item.uid} state={"jump"} position={{
-                    x: enemyRef.current.position.x,
-                    y: enemyRef.current.position.y
-                }} />
-            ) : null}
-            {(enemyRef.current && item.hp < item.totalHp) ? (
-                <CustomProgressBar
-                    ref={progressBarRef}
-                    position={{ x: -enemyRef.current.width / 1.3, y: -35 }}
-                    min={0}
-                    max={item.totalHp}
-                    current={item.hp}
-                    zIndex={enemyRef.current.zIndex + 1}
-                />
-            ) : null}
-        </pixiAnimatedSprite>
-    ) : null
+    return (textures && item && ref.current) ? (<>
+        {item.egg && enemyRef.current ? (
+            <EnemyEgg state={"jump"} item={{ ...item, position: enemyRef.current.position }} />
+        ) : (
+            <pixiAnimatedSprite
+                textures={textures[idleState]}
+                ref={enemyRef}
+                anchor={0.5}
+                scale={enemyScale}
+                eventMode={"static"}
+                onPointerOver={() => setIsHover(true)}
+                onPointerOut={() => setIsHover(false)}
+                animationSpeed={state === idleState ? 0.08 : 0.18}
+                x={item.position.x}
+                y={item.position.y}
+                interactive={true}
+                label={`enemy-${item.uid}`}
+                autoPlay
+                loop
+                filters={filters}
+                hitArea={
+                    new Rectangle(
+                        0,
+                        0,
+                        textures[idleState][0].width,
+                        textures[idleState][0].height
+                    )
+                }
+            >
+                {(enemyRef.current && item.hp < item.totalHp) ? (
+                    <CustomProgressBar
+                        ref={progressBarRef}
+                        position={{ x: -enemyRef.current.width / 1.3, y: -35 }}
+                        min={0}
+                        max={item.totalHp}
+                        current={item.hp}
+                        zIndex={enemyRef.current.zIndex + 1}
+                    />
+                ) : null}
+            </pixiAnimatedSprite>
+        )}
+    </>) : null
 }
 
 export default Enemy

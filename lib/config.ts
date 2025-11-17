@@ -290,6 +290,8 @@ export const initialEnemyModel = {
     zIndex: 99,
     name: "Enemy-" + 1,
     dead: false,
+    queen: false,
+    egg: true,
 } as all.game.EnemyEntity
 
 export const birthAnimationSteps = {

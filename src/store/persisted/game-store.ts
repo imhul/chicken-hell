@@ -1,8 +1,6 @@
 // config
 import { defaultChunkSize, initialBaseModel } from '@lib/config'
 
-export type Enemies = Record<string, all.game.EnemyEntity[]>
-
 export const initState = {
     init: false,
     paused: false,

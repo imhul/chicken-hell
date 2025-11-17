@@ -76,34 +76,39 @@ const EnemiesColony = ({ ref, colony }: all.game.ColonyProps) => {
                         x: getRandomInt(1, defaultChunkSize * 2),
                         y: getRandomInt(1, defaultChunkSize * 2),
                     }
-                    if (enemies.length === 0 && dirty) {
-                        const newEnemy: all.game.EnemyEntity = {
-                            ...initialEnemyModel,
-                            id: `${colony.id}-1`,
-                            uid: crypto.randomUUID(),
-                            base,
-                            colony,
-                            position: getRandomPositionNearBase(base),
-                        }
-                        setBasePos(base)
-                        setGameAction("setEnemies", { colonyUid: colony.uid, newEnemy })
-                        return
-                    }
+                    // if (enemies.length === 0 && dirty) {
+                    //     console.info("Spawning first enemy for dirty colony")
+                    //     const newEnemy: all.game.EnemyEntity = {
+                    //         ...initialEnemyModel,
+                    //         id: `${colony.id}-1`,
+                    //         uid: crypto.randomUUID(),
+                    //         base,
+                    //         colony,
+                    //         position: getRandomPositionNearBase(base),
+                    //     }
+                    //     setBasePos(base)
+                    //     setGameAction("setEnemies", { colonyUid: colony.uid, newEnemy })
+                    //     return
+                    // }
                     const list = currentColony?.list || []
                     const enemyBasePosition = dirty ? (list[0]?.base ?? base) : base
                     const newEnemyState = list[0] ? list[0].state : initialEnemyModel.state
                     const id = getNewId(colony.id, list, 0)
+                    const position = list.length === 0 ? getRandomPositionNearBase(enemyBasePosition) : list[0].position
                     const newEnemy: all.game.EnemyEntity = {
                         ...initialEnemyModel,
                         id,
                         colony,
+                        position,
+                        queen: list.length === 0,
+                        egg: list.length > 0,
                         state: newEnemyState,
                         base: enemyBasePosition,
                         uid: crypto.randomUUID(),
                         timestamp: performance.now(),
-                        position: getRandomPositionNearBase(enemyBasePosition),
                     }
                     setGameAction("setEnemies", { colonyUid: colony.uid, newEnemy })
+                    console.info("Spawning new enemy: ", list)
                 }, pauseToNextBirth)
 
                 return () => clearTimeout(timer)
@@ -129,10 +134,7 @@ const EnemiesColony = ({ ref, colony }: all.game.ColonyProps) => {
     }, [colonies, colony])
 
     const colonyData = colonies[colony.uid]
-
-    if (!colonyData) {
-        return null
-    }
+    if (!colonyData) return null
 
     return (
         <pixiContainer sortableChildren={true} label="enemy-colony">
