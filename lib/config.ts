@@ -288,7 +288,6 @@ export const initialEnemyModel = {
     damage: 0,
     age: 0,
     zIndex: 99,
-    name: "Enemy-" + 1,
     dead: false,
     queen: false,
     egg: true,

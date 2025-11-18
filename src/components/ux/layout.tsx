@@ -17,9 +17,6 @@ const Layout = () => {
     useEffect(() => {
         getCurrentWindow().once('tauri://close-requested', async () => {
             await getCurrentWebview().clearAllBrowsingData()
-            // .then(() => {
-            //     console.info("Cleared browsing data")
-            // })
             await getCurrentWindow().destroy()
         })
     }, [])

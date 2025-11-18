@@ -28,6 +28,7 @@ const Header = () => {
             setGameAction("clearCache")
             toast.success("Cleared!", {
                 description: "Store and all browsing data cleared!",
+                position: "top-left",
             })
             startSFX("fire")
         })

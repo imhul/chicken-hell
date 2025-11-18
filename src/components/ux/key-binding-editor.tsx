@@ -52,7 +52,9 @@ const KeyBindingEditor = () => {
                 ...newBindings
             }
         })
-        toast.success("Key bindings saved successfully!")
+        toast.success("Key bindings saved successfully!", {
+            position: "top-left",
+        })
     }
 
     const reset = () => {

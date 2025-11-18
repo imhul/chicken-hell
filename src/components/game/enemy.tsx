@@ -3,11 +3,10 @@ import { useEffect, useRef, useState } from "react"
 import { usePersistedStore } from "@/store"
 // hooks
 import { useSFX } from "@hooks/useSFX"
-import { useBirthAnimation } from "@hooks/useBirth"
 // pixi
 import { ColorMatrixFilter, Assets, AnimatedSprite, Rectangle } from "pixi.js"
 // components
-import EnemyEgg from "@components/game/enemy-egg"
+// import EnemyEgg from "@components/game/enemy-egg"
 import { ProgressBar } from "@pixi/ui"
 import CustomProgressBar from "@components/pixi/custom-progress-bar"
 // utils
@@ -53,11 +52,6 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
     const init = usePersistedStore((s: Store) => s.init)
     // hooks
     const startSFX = useSFX()
-    useBirthAnimation(
-        enemyRef as React.RefObject<AnimatedSprite>,
-        !!textures,
-        "enemy"
-    )
 
     const stopLoop = () => {
         if (animationFrameRef.current) {
@@ -71,7 +65,6 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
     }
 
     const attack = () => {
-        // console.info("Enemy attack! 👌")
         if (!ref.current || !enemyRef.current || isBulletActive || hero.hp < 0.1) return
         const heroRef = ref.current.getChildByLabel("hero")
         if (!heroRef) return
@@ -279,48 +272,42 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
         }
     }, [isHovered])
 
-    return (textures && item && ref.current) ? (<>
-        {item.egg && enemyRef.current ? (
-            <EnemyEgg state={"jump"} item={{ ...item, position: enemyRef.current.position }} />
-        ) : (
-            <pixiAnimatedSprite
-                textures={textures[idleState]}
-                ref={enemyRef}
-                anchor={0.5}
-                scale={enemyScale}
-                eventMode={"static"}
-                onPointerOver={() => setIsHover(true)}
-                onPointerOut={() => setIsHover(false)}
-                animationSpeed={state === idleState ? 0.08 : 0.18}
-                x={item.position.x}
-                y={item.position.y}
-                interactive={true}
-                label={`enemy-${item.uid}`}
-                autoPlay
-                loop
-                filters={filters}
-                hitArea={
-                    new Rectangle(
-                        0,
-                        0,
-                        textures[idleState][0].width,
-                        textures[idleState][0].height
-                    )
-                }
-            >
-                {(enemyRef.current && item.hp < item.totalHp) ? (
-                    <CustomProgressBar
-                        ref={progressBarRef}
-                        position={{ x: -enemyRef.current.width / 1.3, y: -35 }}
-                        min={0}
-                        max={item.totalHp}
-                        current={item.hp}
-                        zIndex={enemyRef.current.zIndex + 1}
-                    />
-                ) : null}
-            </pixiAnimatedSprite>
-        )}
-    </>) : null
+    return (textures && item && ref.current) ? (<pixiAnimatedSprite
+        textures={textures[state]}
+        ref={enemyRef}
+        anchor={0.5}
+        scale={enemyScale}
+        eventMode={"static"}
+        onPointerOver={() => setIsHover(true)}
+        onPointerOut={() => setIsHover(false)}
+        animationSpeed={state === idleState ? 0.08 : 0.18}
+        x={item.position.x}
+        y={item.position.y}
+        interactive={true}
+        label={item.name}
+        autoPlay
+        loop
+        filters={filters}
+        hitArea={
+            new Rectangle(
+                0,
+                0,
+                textures[idleState][0].width,
+                textures[idleState][0].height
+            )
+        }
+    >
+        {(enemyRef.current && item.hp < item.totalHp) ? (
+            <CustomProgressBar
+                ref={progressBarRef}
+                position={{ x: -enemyRef.current.width / 1.3, y: -35 }}
+                min={0}
+                max={item.totalHp}
+                current={item.hp}
+                zIndex={enemyRef.current.zIndex + 1}
+            />
+        ) : null}
+    </pixiAnimatedSprite>) : null
 }
 
 export default Enemy

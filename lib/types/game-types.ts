@@ -96,7 +96,7 @@ export type DevComponentProps = {
 
 export interface EnemyEggProps {
     item: EnemyEntity
-    state: "jump" | "birth" | "death"
+    // position: Position
 }
 
 //----------------------------------------------

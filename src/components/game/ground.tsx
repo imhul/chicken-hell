@@ -84,6 +84,7 @@ const Ground = ({ size }: { size: all.game.BaseSize }) => {
                 tiledmap.on("click", (props) => {
                     toast.info("click", {
                         description: `x: ${props.global.x}, y: ${props.global.y}`,
+                        position: "top-left",
                     })
                 })
             }

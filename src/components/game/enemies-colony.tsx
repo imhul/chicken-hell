@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 // store
 import { usePersistedStore } from "@/store"
 // components
 import Enemy from "@components/game/enemy"
+import EnemyEgg from "@components/game/enemy-egg"
 import EnemyBase from "@/components/game/enemy-base"
 // utils
 import { getRandomInt } from "@lib/utils"
@@ -19,6 +20,9 @@ import {
 type Store = all.store.PersistedStore
 
 const EnemiesColony = ({ ref, colony }: all.game.ColonyProps) => {
+    // refs
+    const colonyRef = useRef<all.pixi.Container | null>(null)
+    const queenRef = useRef<all.pixi.AnimatedSprite | null>(null)
     // store
     const isDev = usePersistedStore((s: Store) => s.isDev)
     const paused = usePersistedStore((s: Store) => s.paused)
@@ -94,21 +98,30 @@ const EnemiesColony = ({ ref, colony }: all.game.ColonyProps) => {
                     const enemyBasePosition = dirty ? (list[0]?.base ?? base) : base
                     const newEnemyState = list[0] ? list[0].state : initialEnemyModel.state
                     const id = getNewId(colony.id, list, 0)
-                    const position = list.length === 0 ? getRandomPositionNearBase(enemyBasePosition) : list[0].position
+                    const isQueen = list.length === 0
+                    const position = isQueen
+                        ? getRandomPositionNearBase(enemyBasePosition)
+                        : (queenRef.current ? {
+                            x: queenRef.current.x,
+                            y: queenRef.current.y
+                        } : list[0].position)
+
                     const newEnemy: all.game.EnemyEntity = {
                         ...initialEnemyModel,
                         id,
                         colony,
                         position,
-                        queen: list.length === 0,
-                        egg: list.length > 0,
+                        hp: isQueen ? initialEnemyModel.hp * 5 : initialEnemyModel.hp,
+                        totalHp: isQueen ? initialEnemyModel.hp * 5 : initialEnemyModel.hp,
+                        name: (isQueen ? "queen-" : "enemy-") + colony.id,
+                        queen: isQueen,
+                        egg: !isQueen,
                         state: newEnemyState,
                         base: enemyBasePosition,
                         uid: crypto.randomUUID(),
                         timestamp: performance.now(),
                     }
                     setGameAction("setEnemies", { colonyUid: colony.uid, newEnemy })
-                    console.info("Spawning new enemy: ", list)
                 }, pauseToNextBirth)
 
                 return () => clearTimeout(timer)
@@ -133,11 +146,19 @@ const EnemiesColony = ({ ref, colony }: all.game.ColonyProps) => {
         }
     }, [colonies, colony])
 
+    useEffect(() => {
+        if (colonyRef.current && !queenRef.current) {
+            const queenSprite = colonyRef.current.getChildByLabel("queen-" + colony.id)
+            queenRef.current = queenSprite as all.pixi.AnimatedSprite
+            console.info("queenSprite: ", queenSprite)
+        }
+    }, [colonyRef, queenRef, colony, colonies, enemies])
+
     const colonyData = colonies[colony.uid]
     if (!colonyData) return null
 
     return (
-        <pixiContainer sortableChildren={true} label="enemy-colony">
+        <pixiContainer ref={colonyRef} sortableChildren={true} label="enemy-colony">
             {(ref.current && (basePos.x !== 0 || basePos.y !== 0)) ? (
                 <>
                     <EnemyBase
@@ -147,15 +168,19 @@ const EnemiesColony = ({ ref, colony }: all.game.ColonyProps) => {
                         uid={colony.uid}
                     />
                     {enemies.length > 0 &&
-                        enemies.map((enemy) => (
-                            <Enemy
-                                key={enemy.id}
-                                item={enemy}
-                                ref={ref}
-                                base={basePos}
-                                seed={new Rand(enemy.uid)}
-                            />
-                        ))}
+                        enemies.map((enemy) => {
+                            return enemy.egg ?
+                                (<EnemyEgg
+                                    item={enemy}
+                                    key={enemy.id}
+                                />) : (<Enemy
+                                    key={enemy.id}
+                                    item={enemy}
+                                    ref={ref}
+                                    base={basePos}
+                                    seed={new Rand(enemy.uid)}
+                                />)
+                        })}
                 </>
             ) : null}
         </pixiContainer>
