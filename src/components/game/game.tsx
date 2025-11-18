@@ -54,6 +54,9 @@ const Game = () => {
         }
     }, [])
 
+    // TODO: need to find the cause and solution to the problem 
+    // of blinking objects on the map when a large number of enemies spawn!
+
     const renderGame = () => {
         switch (scene) {
             case 1:
@@ -64,10 +67,6 @@ const Game = () => {
                     <Bullets ref={viewportRef} />
                     <Hero ref={viewportRef} />
                     <Objects size={gameSize} />
-                    {/* <PixiFire
-                            width={50}
-                            height={500}
-                        /> */}
                 </>) : null
             default:
                 return null
