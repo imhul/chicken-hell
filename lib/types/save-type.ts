@@ -13,3 +13,27 @@ export interface SaveType {
     worldName: string
     zoom: number
 }
+
+export interface SaveRequestType {
+    data: SaveType
+    slot: number
+}
+
+export interface LoadRequestType {
+    slot: number
+}
+
+export interface DeleteRequestType {
+    slot: number
+}
+
+export interface SaveResponseType {
+    success: boolean
+    message: string
+}
+
+export interface LoadResponseType {
+    success: boolean
+    message: string
+    data?: SaveType
+}

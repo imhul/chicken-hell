@@ -141,24 +141,128 @@ export interface GameObjectEntity extends BaseEntity {
     obstacle: boolean
 }
 
-export interface HeroEntity extends BaseEntity {
-    abilities: any[] // temporary type
-    achievements: any[] // temporary type
-    attackPower: number
-    buffs: any[] // temporary type
-    damage: number
-    debuffs: any[] // temporary type
-    inventory: any[] // temporary type
-    itemsStorage: any[] // temporary type
+export interface Bonus {
+    id: string
+    name: string
+    value: number
+}
+
+export interface Ability {
+    id: string
+    name: AbilityType
+    active: boolean
+    status: string
+    progress: number
+    description: string
     lvl: number
-    pointsToNextLevel: number
-    professions: any[] // temporary type
+    lvlName: lvlName
+    pointsToNextLvl: number
+    bonus: Bonus
+}
+
+export interface Achievement {
+    id: string
+    name: AchievementType
+    status: string
+    progress: number
+    description: string
+}
+
+export interface Buff {
+    id: string
+    name: BuffType
+    active: boolean
+    status: string
+    progress: number
+    description: string
+    lvl: number
+    lvlName: lvlName
+    pointsToNextLvl: number
+    bonus: Bonus
+}
+
+export interface Debuff {
+    id: string
+    name: DebuffType
+    active: boolean
+    status: string
+    progress: number
+    description: string
+    lvl: number
+    lvlName: lvlName
+    pointsToNextLvl: number
+    bonus: Bonus
+}
+
+export interface Skill {
+    id: string
+    name: SkillType
+    active: boolean
+    status: string
+    progress: number
+    description: string
+    lvl: number
+    lvlName: lvlName
+    pointsToNextLvl: number
+    bonus: Bonus
+}
+
+export interface Technology {
+    id: string
+    name: string
+    active: boolean
+    status: string
+    progress: number
+    level: number
+    lvlName: lvlName
+    pointsToNextLvl: number
+    bonus: Bonus
+}
+
+export interface Profession {
+    id: string
+    name: ProfessionType
+    active: boolean
+    status: string
+    progress: number
+    lvl: number
+    lvlName: lvlName
+    pointsToNextLvl: number
+    bonus: Bonus
+}
+
+export interface ItemEntity extends BaseEntity {
+    id: string
+    title: string
+    description: string
+    quantity: number
+    stackable: boolean
+    maxStack: number
+    wearable: boolean
+    equippable: boolean
+    usable: boolean
+    broken: boolean
+    bonus: Bonus[]
+}
+
+export interface HeroEntity extends BaseEntity {
+    abilities: Record<string, Ability>
+    achievements: Achievement[]
+    attackPower: number
+    buffs: Record<string, Buff>
+    damage: number
+    debuffs: Record<string, Debuff>
+    inventory: ItemEntity[]
+    itemsStorage: ItemEntity[]
+    lvl: number
+    pointsToNextLvl: number
+    professions: Record<string, Profession>
     shooting: number
     skills: Record<string, Skill>
     speed: number
     state: HeroState | BaseState
-    technologies: any[] // temporary type
-    wearedItems: any[] // temporary type
+    technologies: Record<string, Technology>
+    wearedItems: ItemEntity[]
     xp: number
 }
 
@@ -182,46 +286,6 @@ export interface BulletEntity {
     speed: number
     damage: number
     distance: number
-}
-
-export interface Bonus {
-    id: string
-    name: string
-    value: number
-}
-
-export interface Skill {
-    id: string
-    name: string
-    status: string
-    progress: number
-    level: number
-    levelName: LevelName
-    pointsToNextLevel: number
-    bonus: Bonus
-    skillType: SkillType
-}
-
-export interface Technology {
-    id: string
-    name: string
-    status: string
-    progress: number
-    level: number
-    levelName: LevelName
-    pointsToNextLevel: number
-    bonus: Bonus
-}
-
-export interface Profession {
-    id: string
-    name: ProfessionType
-    status: string
-    progress: number
-    level: number
-    levelName: LevelName
-    pointsToNextLevel: number
-    bonus: Bonus
 }
 
 //----------------------------------------------
@@ -305,7 +369,7 @@ export type HeroState =
     | "power-up"
     | "shot"
 export type JumpDirection = "left" | "right" | "up"
-export type LevelName = "trainee" | "medium" | "master" | "prime"
+export type lvlName = "trainee" | "medium" | "master" | "prime"
 export type MovementDirection =
     "runn"
     | "runs"
@@ -345,6 +409,10 @@ export type ProfessionType =
     | 'any'
 export type EnemyColonyState = "idle" | "angry"
 export type SkillType = "shooting" | "defense" | "speed" | "health" | "critical-chance" | "critical-damage" | "crafting" | "mining" | "harvesting" | "building" | "research" | "healing"
+export type AbilityType = "shooting" | "defense" | "speed" | "health" | "critical-chance" | "critical-damage" | "crafting" | "mining" | "harvesting" | "building" | "research" | "healing"
+export type BuffType = "shooting" | "defense" | "speed" | "health" | "critical-chance" | "critical-damage" | "crafting" | "mining" | "harvesting" | "building" | "research" | "healing"
+export type DebuffType = "shooting" | "defense" | "speed" | "health" | "critical-chance" | "critical-damage" | "crafting" | "mining" | "harvesting" | "building" | "research" | "healing"
+export type AchievementType = "first-blood" | "sharp-shooter" | "survivor" | "collector" | "builder" | "defender" | "explorer" | "harvester" | "miner" | "crafter" | "researcher" | "healer"
 export type SummaryState = HeroState | EnemyState | EnemyEggState
 export type TaskStatus =
     | 'accepted'
