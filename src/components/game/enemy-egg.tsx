@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { memo, useState, useEffect, useRef } from "react"
 import { Assets, AnimatedSprite } from "pixi.js"
 // hooks
 import { useBirthAnimation } from "@hooks/useBirth"
@@ -81,4 +81,4 @@ const enemyEgg = ({ item }: all.game.EnemyEggProps) => {
     />) : null
 }
 
-export default enemyEgg
+export default memo(enemyEgg)

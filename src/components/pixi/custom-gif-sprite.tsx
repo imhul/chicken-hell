@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useState } from "react"
+import { memo, forwardRef, useEffect, useState } from "react"
 import { GifSprite, type GifSource } from "pixi.js/gif"
 import { useExtend } from "@pixi/react"
 import { Assets } from "pixi.js"
@@ -39,4 +39,4 @@ const CustomGifSprite = forwardRef<GifSprite, all.game.CustomGifSpriteProps>(
 )
 
 CustomGifSprite.displayName = "CustomGifSprite"
-export default CustomGifSprite
+export default memo(CustomGifSprite)

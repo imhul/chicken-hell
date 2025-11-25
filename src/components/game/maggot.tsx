@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { memo, useState, useEffect, useRef } from "react"
 // store
 import { usePersistedStore } from "@/store"
 // utils
@@ -100,4 +100,4 @@ const Maggot = ({ texture, width, height, item }: all.game.MaggotProps) => {
     )
 }
 
-export default Maggot
+export default memo(Maggot)

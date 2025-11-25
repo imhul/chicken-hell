@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { memo, useEffect, useRef, useState } from "react"
 import { Assets } from "pixi.js"
 // components
 import Explosion from "@/components/game/explosion"
@@ -81,4 +81,4 @@ const EnemyBase = ({ isBirth, isDeath, uid, pos }: all.game.EnemyBaseProps) => {
     </>) : null
 }
 
-export default EnemyBase
+export default memo(EnemyBase)

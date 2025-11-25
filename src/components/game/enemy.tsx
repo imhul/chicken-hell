@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { memo, useEffect, useRef, useState } from "react"
 // store
 import { usePersistedStore } from "@/store"
 // hooks
@@ -273,7 +273,7 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
     }, [isHovered])
 
     return (textures && item && ref.current) ? (<pixiAnimatedSprite
-        textures={textures[state]}
+        textures={textures[idleState]}
         ref={enemyRef}
         anchor={0.5}
         scale={enemyScale}
@@ -310,4 +310,4 @@ const Enemy = ({ ref, base, item, seed }: all.game.EnemyProps) => {
     </pixiAnimatedSprite>) : null
 }
 
-export default Enemy
+export default memo(Enemy)

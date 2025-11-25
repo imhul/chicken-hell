@@ -1,4 +1,4 @@
-import { useEffect, forwardRef, useImperativeHandle, useRef } from "react"
+import { memo, useEffect, forwardRef, useImperativeHandle, useMemo, useRef } from "react"
 import { useExtend } from "@pixi/react"
 import { Viewport } from "pixi-viewport"
 // store
@@ -10,6 +10,7 @@ const Camera = forwardRef<Viewport | null, all.game.CameraProps>(
     ({ gameSize, children, ...props }, ref) => {
         useExtend({ Viewport })
         const camRef = useRef<Viewport | null>(null)
+        const memoizedChildren = useMemo(() => children, [children])
         // store
         const setGameAction = usePersistedStore((s: Store) => s.setGameAction)
 
@@ -46,11 +47,11 @@ const Camera = forwardRef<Viewport | null, all.game.CameraProps>(
 
         return (
             <pixiViewport {...cameraOptions} ref={camRef} events={props.events}>
-                {children}
+                {memoizedChildren}
             </pixiViewport>
         )
     }
 )
 
 Camera.displayName = "Camera"
-export default Camera
+export default memo(Camera)

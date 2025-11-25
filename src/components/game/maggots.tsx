@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { memo, useState, useEffect } from "react"
 // components
 import { Assets, Rectangle, Point } from "pixi.js"
 import Maggot from "@components/game/maggot"
@@ -58,4 +58,4 @@ const Maggots = ({ width, height }: { width: number; height: number }) => {
     )
 }
 
-export default Maggots
+export default memo(Maggots)

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { memo, useEffect, useRef, useState, useCallback } from "react"
 import { GlowFilter } from 'pixi-filters'
 // store
 import { usePersistedStore } from "@/store"
@@ -55,7 +55,7 @@ const Hero = ({ ref }: all.game.HeroProps) => {
         outerStrength: 0,
     })
 
-    const onKeydown = (event: any) => {
+    const onKeydown = useCallback((event: any) => {
         let globalX = 0
         const { keyCodes, keys, codes } = keyBindings.shoot
         ref.current?.on("pointermove", (event: any) => {
@@ -71,7 +71,7 @@ const Hero = ({ ref }: all.game.HeroProps) => {
         if ((event.key === keys[0] || event.code === codes[0] || event.keyCode === keyCodes[0]) && heroRef.current && globalX !== 0) {
             heroRef.current.scale.x = heroRef.current.position.x < globalX ? heroScale : -heroScale
         }
-    }
+    }, [])
 
     useEffect(() => {
         if (!textures)
@@ -157,4 +157,4 @@ const Hero = ({ ref }: all.game.HeroProps) => {
     ) : null
 }
 
-export default Hero
+export default memo(Hero)

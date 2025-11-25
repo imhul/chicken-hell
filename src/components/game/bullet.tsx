@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useLayoutEffect } from "react"
+import { memo, useEffect, useRef, useState, useLayoutEffect } from "react"
 // store
 import { usePersistedStore } from "@/store"
 // components
@@ -188,4 +188,4 @@ const Bullet = ({
     )
 }
 
-export default Bullet
+export default memo(Bullet)

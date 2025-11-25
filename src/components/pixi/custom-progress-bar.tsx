@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useRef } from "react"
+import { memo, forwardRef, useEffect, useRef } from "react"
 import { useExtend } from "@pixi/react"
 import { Graphics } from "pixi.js"
 import { ProgressBar } from "@pixi/ui"
@@ -61,4 +61,4 @@ const CustomProgressBar = forwardRef<ProgressBar | null, all.game.ProgressBarPro
 )
 
 CustomProgressBar.displayName = "ProgressBar"
-export default CustomProgressBar
+export default memo(CustomProgressBar)

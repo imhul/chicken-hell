@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { memo, useState, useEffect } from "react"
 import { Assets, Rectangle, Sprite, Graphics } from "pixi.js"
 import { useExtend } from "@pixi/react"
 import Rand from 'rand-seed'
@@ -157,4 +157,4 @@ const Objects = ({ size }: all.game.ObjectsProps) => {
     return <>{renderObjects()}</>
 }
 
-export default Objects
+export default memo(Objects)

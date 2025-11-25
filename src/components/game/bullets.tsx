@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { memo, useEffect, useState } from "react"
 import { Assets } from "pixi.js"
 // store
 import { usePersistedStore } from "@/store"
@@ -40,4 +40,4 @@ const Bullets = ({ ref }: all.game.BulletsProps) => {
     )
 }
 
-export default Bullets
+export default memo(Bullets)

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { memo, useState, useEffect, useRef } from "react"
 // store
 import { usePersistedStore } from "@/store"
 // components
@@ -150,7 +150,6 @@ const EnemiesColony = ({ ref, colony }: all.game.ColonyProps) => {
         if (colonyRef.current && !queenRef.current) {
             const queenSprite = colonyRef.current.getChildByLabel("queen-" + colony.id)
             queenRef.current = queenSprite as all.pixi.AnimatedSprite
-            console.info("queenSprite: ", queenSprite)
         }
     }, [colonyRef, queenRef, colony, colonies, enemies])
 
@@ -187,4 +186,4 @@ const EnemiesColony = ({ ref, colony }: all.game.ColonyProps) => {
     )
 }
 
-export default EnemiesColony
+export default memo(EnemiesColony)

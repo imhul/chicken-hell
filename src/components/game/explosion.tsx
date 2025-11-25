@@ -1,3 +1,5 @@
+import { memo } from "react"
+// assets
 import CustomGifSprite from "@components/pixi/custom-gif-sprite"
 
 const Explosion = ({ position, scale, onComplete }: all.game.ExplosionProps) => {
@@ -9,4 +11,4 @@ const Explosion = ({ position, scale, onComplete }: all.game.ExplosionProps) => 
     />
 }
 
-export default Explosion
+export default memo(Explosion)

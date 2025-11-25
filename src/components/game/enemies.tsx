@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { memo, useState, useEffect } from "react"
 // hooks
 import { useSFX } from "@hooks/useSFX"
 // store
@@ -79,4 +79,4 @@ const Enemies = ({ ref }: all.game.EnemiesProps) => {
     )
 }
 
-export default Enemies
+export default memo(Enemies)
