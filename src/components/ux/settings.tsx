@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react"
+// tauri
+import { getCurrentWindow } from '@tauri-apps/api/window'
 // hooks
 import { useSFX } from "@hooks/useSFX"
 // components
@@ -37,6 +39,7 @@ import {
     seedLength,
     gameGameDifficulties,
 } from '@lib/config'
+import { set } from "react-hook-form"
 
 type Store = all.store.PersistedStore
 
@@ -55,11 +58,6 @@ const Settings = () => {
     const setGameAction = usePersistedStore((s: Store) => s.setGameAction)
     // hooks
     const startSFX = useSFX()
-
-    useEffect(() => {
-        resetAudio()
-        startSFX("ambient")
-    }, [])
 
     const onSeedChange = (e: all.react.ChangeEvent<HTMLInputElement>) => { setGameAction("setSeed", String(e.target.value)) }
 
@@ -83,10 +81,22 @@ const Settings = () => {
         setTimeout(() => setCopied(false), 3000)
     }
 
+    useEffect(() => {
+        resetAudio()
+        startSFX("ambient")
+    }, [])
+
+    useEffect(() => {
+        const setFullscreen = async () => {
+            await getCurrentWindow().setFullscreen(preferences.fullscreen)
+        }
+        setFullscreen()
+    }, [preferences.fullscreen])
+
     return (
         <div className="settings flex flex-col gap-[50px] items-center sm:items-start">
             <div className="flex flex-row items-start justify-center gap-8 w-full">
-                <Card className="p-8 basis-1/2 w-[50%] border-(--bg-half-transparent) border-[4px] bg-(--bg-half-transparent)">
+                <Card className="full-h p-8 basis-1/2 w-[50%] border-(--bg-half-transparent) border-[4px] bg-(--bg-half-transparent)">
                     <CardHeader>
                         <CardTitle className="text-2xl text-primary">Game Seed</CardTitle>
                         <CardDescription className="text-lg">
@@ -163,7 +173,7 @@ const Settings = () => {
                         </ol>
                     </CardContent>
                 </Card>
-                <Card className="p-8 basis-1/2 w-[50%] border-(--bg-half-transparent) border-[4px] bg-(--bg-half-transparent)">
+                <Card className="full-h p-8 basis-1/2 w-[50%] border-(--bg-half-transparent) border-[4px] bg-(--bg-half-transparent)">
                     <CardHeader>
                         <CardTitle className="text-2xl text-primary">Preferences</CardTitle>
                         <CardDescription className="text-lg">

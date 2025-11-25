@@ -322,3 +322,7 @@ button:focus-visible {
 .hidden {
     display: none !important;
 }
+
+.full-h {
+    height: -webkit-fill-available;
+}
