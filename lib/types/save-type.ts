@@ -14,25 +14,25 @@ export interface SaveType {
     zoom: number
 }
 
-export interface SaveRequestType {
+export interface SaveRequestParams {
     data: SaveType
     slot: number
 }
 
-export interface LoadRequestType {
+export interface LoadRequestParams {
     slot: number
 }
 
-export interface DeleteRequestType {
+export interface DeleteRequestParams {
     slot: number
 }
 
-export interface SaveResponseType {
+export interface SaveResponseParams {
     success: boolean
     message: string
 }
 
-export interface LoadResponseType {
+export interface LoadResponseParams {
     success: boolean
     message: string
     data?: SaveType
