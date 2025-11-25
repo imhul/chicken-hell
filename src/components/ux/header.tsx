@@ -17,6 +17,7 @@ import { toast } from "sonner"
 
 const Header = () => {
     // store
+    const goto = useStore((s: all.store.GlobalStore) => s.to)
     const route = useStore((s: all.store.GlobalStore) => s.route)
     const setGameAction = usePersistedStore((s: all.store.PersistedStore) => s.setGameAction)
     const showHeroActionMenu = usePersistedStore((s: all.store.PersistedStore) => s.showHeroActionMenu)
@@ -24,14 +25,21 @@ const Header = () => {
     const startSFX = useSFX()
 
     const reload = async () => {
-        await getCurrentWebview().clearAllBrowsingData().then(() => {
-            setGameAction("clearCache")
-            toast.success("Cleared!", {
-                description: "Store and all browsing data cleared!",
-                position: "top-left",
+        await getCurrentWebview()
+            .clearAllBrowsingData()
+            .then(() => {
+                setGameAction("clearCache")
+                toast.success("Cleared!", {
+                    description: "Store and all browsing data cleared!",
+                    position: "top-left",
+                })
             })
-            startSFX("fire")
-        })
+            .finally(() => {
+                if (route === "game") {
+                    goto("home")
+                }
+                startSFX("fire")
+            })
     }
 
     return (

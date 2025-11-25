@@ -92,6 +92,7 @@ export type AudioAction =
     | "stopAttackSFX"
     | "stopAmbientSFX"
     | "stopFireSFX"
+
 export type AudioSlice = {
     idleSFXStarted: boolean,
     attackSFXStarted: boolean,

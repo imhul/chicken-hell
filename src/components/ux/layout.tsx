@@ -3,7 +3,7 @@ import { useEffect } from "react"
 import { getCurrentWindow } from '@tauri-apps/api/window'
 import { getCurrentWebview } from '@tauri-apps/api/webview'
 // store
-import { useStore } from "@/store"
+import { useStore, usePersistedStore } from "@/store"
 // components
 import { ThemeProvider } from "@components/ux/theme-provider"
 import Header from "@components/ux/header"
@@ -13,11 +13,18 @@ import { Output as GameOutput } from "@components/game/output"
 
 const Layout = () => {
     const route = useStore((s: all.store.GlobalStore) => s.route)
+    const setGameAction = usePersistedStore((s: all.store.PersistedStore) => s.setGameAction)
 
     useEffect(() => {
         getCurrentWindow().once('tauri://close-requested', async () => {
-            await getCurrentWebview().clearAllBrowsingData()
-            await getCurrentWindow().destroy()
+            await getCurrentWebview()
+                .clearAllBrowsingData()
+                .then(() => {
+                    setGameAction("clearCache")
+                })
+                .finally(async () => {
+                    await getCurrentWindow().destroy()
+                })
         })
     }, [])
 
