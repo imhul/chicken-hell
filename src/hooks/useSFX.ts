@@ -62,9 +62,10 @@ export const useSFX = () => {
     }, [soundLevel, zoom])
 
     const setRandomLoop = (name: string) => {
-        if (enemies === 0 || paused || !init) return
+        if (route !== "game" || enemies === 0 || paused || !init) return
         const delay = Math.random() * (MAX_DELAY - MIN_DELAY) + MIN_DELAY
         setTimeout(() => {
+            if (route !== "game" || enemies === 0 || paused || !init) return
             play(name)
         }, delay)
     }
@@ -115,6 +116,7 @@ export const useSFX = () => {
         }
 
         if (name === "idle" || name === "attack") {
+            if (route !== "game" || enemies === 0 || paused || !init) return
             const chanceCalc = maxChanceOfEnemyClucking + (enemies - 1) * (minChanceOfEnemyClucking - maxChanceOfEnemyClucking) / (50 - 1)
             const chanceOfSFX = Number(chanceCalc.toFixed(5))
 
