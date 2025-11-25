@@ -43,7 +43,6 @@ type Store = all.store.PersistedStore
 const Settings = () => {
     const [copied, setCopied] = useState(false)
     // store
-    const init = usePersistedStore((s: Store) => s.init)
     const seed = usePersistedStore((s: Store) => s.seed)
     const paused = usePersistedStore((s: Store) => s.paused)
     const goto = useStore((s: all.store.GlobalStore) => s.to)
@@ -54,13 +53,11 @@ const Settings = () => {
     const resetAudio = usePersistedStore((s: Store) => s.resetAudio)
     const preferences = usePersistedStore((s: Store) => s.preferences)
     const setGameAction = usePersistedStore((s: Store) => s.setGameAction)
-    const fireSFXStarted = usePersistedStore((s: Store) => s.fireSFXStarted)
-    const ambientSFXStarted = usePersistedStore((s: Store) => s.ambientSFXStarted)
     // hooks
     const startSFX = useSFX()
 
     useEffect(() => {
-        if (fireSFXStarted || ambientSFXStarted) resetAudio()
+        resetAudio()
         startSFX("ambient")
     }, [])
 
@@ -277,7 +274,7 @@ const Settings = () => {
                     onClick={() => goto("home")}
                 >
                     <span className="text-2xl text-gray-950">
-                        {init || route === "home" ? "Back" : "To Home"}
+                        {(isGameInit || route === "home") ? "Back" : "To Home"}
                     </span>
                 </Button>
                 {paused && isGameInit ? (<>
