@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useCallback, useEffect, useRef } from "react"
 // store
 import { useStore, usePersistedStore } from "@/store"
 // utils
@@ -52,6 +52,12 @@ export const useSFX = () => {
     const paused = usePersistedStore((s: Store) => s.paused)
     const zoom = usePersistedStore((s: Store) => s.zoom) // from 0.5 to 2
     const init = usePersistedStore((s: Store) => s.init)
+    // refs
+    const pausedRef = useRef(paused)
+    
+    useEffect(() => {
+        pausedRef.current = paused
+    }, [paused])
 
     useEffect(() => {
         Howler.autoUnlock = true
@@ -61,14 +67,14 @@ export const useSFX = () => {
         Howler.volume(soundLevel / 100 * zoom)
     }, [soundLevel, zoom])
 
-    const setRandomLoop = (name: string) => {
-        if (route !== "game" || enemies === 0 || paused || !init) return
+    const setRandomLoop = useCallback((name: string) => {
+        if (route !== "game" || enemies === 0 || pausedRef.current || !init) return
         const delay = Math.random() * (MAX_DELAY - MIN_DELAY) + MIN_DELAY
         setTimeout(() => {
-            if (route !== "game" || enemies === 0 || paused || !init) return
+            if (route !== "game" || enemies === 0 || pausedRef.current || !init) return
             play(name)
         }, delay)
-    }
+    }, [route, enemies, paused, init])
 
     const play = (name: string) => {
         const randomIndex = Math.floor(Math.random() * soundMap[name].length)
@@ -116,7 +122,6 @@ export const useSFX = () => {
         }
 
         if (name === "idle" || name === "attack") {
-            if (route !== "game" || enemies === 0 || paused || !init) return
             const chanceCalc = maxChanceOfEnemyClucking + (enemies - 1) * (minChanceOfEnemyClucking - maxChanceOfEnemyClucking) / (50 - 1)
             const chanceOfSFX = Number(chanceCalc.toFixed(5))
 
