@@ -43,11 +43,13 @@ type Store = all.store.PersistedStore
 const Settings = () => {
     const [copied, setCopied] = useState(false)
     // store
+    const init = usePersistedStore((s: Store) => s.init)
     const seed = usePersistedStore((s: Store) => s.seed)
     const paused = usePersistedStore((s: Store) => s.paused)
     const goto = useStore((s: all.store.GlobalStore) => s.to)
     const isGameInit = usePersistedStore((s: Store) => s.init)
     const heroName = usePersistedStore((s: Store) => s.heroName)
+    const route = useStore((s: all.store.GlobalStore) => s.route)
     const worldName = usePersistedStore((s: Store) => s.worldName)
     const resetAudio = usePersistedStore((s: Store) => s.resetAudio)
     const preferences = usePersistedStore((s: Store) => s.preferences)
@@ -275,7 +277,7 @@ const Settings = () => {
                     onClick={() => goto("home")}
                 >
                     <span className="text-2xl text-gray-950">
-                        Back
+                        {init || route === "home" ? "Back" : "To Home"}
                     </span>
                 </Button>
                 {paused && isGameInit ? (<>

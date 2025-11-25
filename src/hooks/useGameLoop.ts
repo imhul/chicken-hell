@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useEffect, useRef } from "react"
+import { useLayoutEffect, useEffect, useRef } from "react"
 // store
 import { usePersistedStore } from "@/store"
 // utils
@@ -313,7 +313,7 @@ export const useGameLoop = ({ ref }: all.game.UseGameLoopProps) => {
         return null
     }
 
-    const onKeyDown = useCallback((event: KeyboardEvent) => {
+    const onKeyDown = (event: KeyboardEvent) => {
         if (paused) return
         pressedKeys.current[event.code] = true
         const direction = eventConductor(pressedKeys.current)
@@ -331,9 +331,9 @@ export const useGameLoop = ({ ref }: all.game.UseGameLoopProps) => {
             move(direction)
         }, 1000)
         move(direction)
-    }, [])
+    }
 
-    const onKeyUp = useCallback((event: KeyboardEvent) => {
+    const onKeyUp = (event: KeyboardEvent) => {
         if (paused) return
         if (keyPressTimers.current[event.code]) {
             clearTimeout(keyPressTimers.current[event.code]!);
@@ -346,7 +346,7 @@ export const useGameLoop = ({ ref }: all.game.UseGameLoopProps) => {
         } else {
             stopRun()
         }
-    }, [])
+    }
 
     useEffect(() => {
         if (!keyBindings || paused) return
