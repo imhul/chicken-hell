@@ -20,12 +20,17 @@ tauri-build = { version = "2", features = [] }
 [dependencies]
 tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+actix-web = "4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1", features = ["full"] }
+bson = "3.0.0"
+futures-util = "0.3.31"
+mongodb = "2.1"        # official MongoDB driver
 
 [profile.dev]
 incremental = true # Compile your binary in smaller steps.
-# rustflags = ["-Zthreads=8"] # Better compile performance.
+#rustflags = ["-Zthreads=8"] # Better compile performance.
 
 [profile.release]
 codegen-units = 1 # Allows LLVM to perform better optimization.
@@ -33,5 +38,6 @@ lto = true        # Enables link-time-optimizations.
 opt-level = "s"   # Prioritizes small binary size. Use `3` if you prefer speed.
 panic = "abort"   # Higher performance by disabling panic handlers.
 strip = true      # Ensures debug symbols are removed.
+#rustflags = ["-Cdebuginfo=0", "-Zthreads=8"] # Better compile performance.
 # trim-paths = "all" # Removes potentially privileged information from your binaries.
-# rustflags = ["-Cdebuginfo=0", "-Zthreads=8"] # Better compile performance.
+

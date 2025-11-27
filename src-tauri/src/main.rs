@@ -7,15 +7,22 @@ fn main() {
     chicken_hell_lib::run()
 }
 
-// #[tauri::command]
-// fn restart_app(app_handle: tauri::AppHandle) {
-//     for window in app_handle.windows().values() {
-//         let _ = window.close();
-//     }
+#[deprecated(
+    since = "0",
+    note = "now that func goes to frontend"
+)]
+#[warn(dead_code)]
+#[tauri::command]
+async fn restart_app(app: tauri::AppHandle) -> Result<(), String> {
+    for window in app.webview_windows().values() {
+        let _ = window.close();
+    }
 
-//     std::process::Command::new(std::env::current_exe().unwrap())
-//         .spawn()
-//         .expect("Не вдалося перезапустити застосунок");
+    let exe = std::env::current_exe().map_err(|e| e.to_string())?;
 
-//     std::process::exit(0);
-// }
+    std::process::Command::new(exe)
+        .spawn()
+        .map_err(|e| e.to_string())?;
+
+    std::process::exit(0);
+}
