@@ -1,11 +1,12 @@
-import FPSStats from "react-fps-stats";
+import { useFPS } from "@hooks/useFPS"
 
 const DevFPS = () => {
+    const fps = useFPS()
+
     return (
         <div className="fps">
-            <FPSStats />
+            FPS: {fps}
         </div>
-
     )
 }
 

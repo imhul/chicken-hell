@@ -304,6 +304,10 @@ button:focus-visible {
     background-color: var(--bg-half-transparent);
 }
 
+.markdown-body ol>li {
+    list-style: decimal;
+}
+
 .to-bottom {
     top: 80vh;
     color: var(--accent);
@@ -325,4 +329,10 @@ button:focus-visible {
 
 .full-h {
     height: -webkit-fill-available;
+}
+
+.fps {
+    padding: 5px 15px;
+    font-size: 20px;
+    background-color: var(--bg-half-transparent);
 }

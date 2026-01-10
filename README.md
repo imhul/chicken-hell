@@ -25,6 +25,32 @@ Does he stand a chance?
 
 🕹 🕹 🕹 ⚔ 🐓 ⚔ 🐓 ⚔ 🐓 🍗 🍗 🍗
 
+## Installation
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/imhul/chicken-hell.git
+cd chicken-hell
+```
+
+2. Install Tauri prerequisites: [guide](https://tauri.app/start/prerequisites/)
+
+3. Install dependencies
+
+```bash
+yarn install
+// or
+npm install
+```
+
+## Usage
+
+**Important:** use only tauri mod. Web version is not supported!
+
+1. `yarn tauri dev` - to start development server
+2. `yarn tauri build` - to build the app for production
+
 ## TODO:
 
 - [x] Implement [@pixi/react](https://www.npmjs.com/package/@pixi/react)
@@ -41,6 +67,8 @@ Does he stand a chance?
 - [x] Implement [pixi-filters](https://www.npmjs.com/package/pixi-filters)
 - [x] Implement [Tauri](https://tauri.app)
 - [x] Implement [howler.js](https://www.npmjs.com/package/howler)
+- [ ] Refactoring in SOLID style
+- [ ] Add minimap
 - [ ] Add zIndex reordering
 - [ ] Add fight/die mechanics, including bullets, explosions, damage and health
 - [ ] Implement map chunk generation

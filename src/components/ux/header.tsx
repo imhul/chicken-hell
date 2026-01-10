@@ -8,6 +8,7 @@ import Menu from "@components/ux/menu"
 import Link from "@components/ux/link"
 import DevHeroActions from "@components/ux/dev-hero-actions"
 import DevMenu from "@/components/ux/dev-menu"
+import DevFPS from "@components/ux/dev-fps"
 // hooks
 import { useSFX } from "@hooks/useSFX"
 // store
@@ -15,12 +16,15 @@ import { useStore, usePersistedStore } from "@/store"
 // utils
 import { toast } from "sonner"
 
+type Store = all.store.PersistedStore
+
 const Header = () => {
     // store
     const goto = useStore((s: all.store.GlobalStore) => s.to)
+    const showFPS = usePersistedStore((s: Store) => s.showFPS)
     const route = useStore((s: all.store.GlobalStore) => s.route)
-    const setGameAction = usePersistedStore((s: all.store.PersistedStore) => s.setGameAction)
-    const showHeroActionMenu = usePersistedStore((s: all.store.PersistedStore) => s.showHeroActionMenu)
+    const setGameAction = usePersistedStore((s: Store) => s.setGameAction)
+    const showHeroActionMenu = usePersistedStore((s: Store) => s.showHeroActionMenu)
     // hooks
     const startSFX = useSFX()
 
@@ -54,6 +58,7 @@ const Header = () => {
             </Link>
             <Menu />
             <div className="flex items-center gap-4">
+                {showFPS && (<DevFPS />)}
                 <Button
                     size="icon"
                     variant="ghost"

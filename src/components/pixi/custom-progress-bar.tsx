@@ -24,10 +24,10 @@ const CustomProgressBar = forwardRef<ProgressBar | null, all.game.ProgressBarPro
             bar.label = "progress-bar"
             bar.width = 12
             bar.height = 2
-            bar.zIndex = zIndex
             bar.alpha = 0.85
             bar.progress = 0
             bar.scale.set(0.25)
+            if (!!zIndex) bar.zIndex = zIndex
 
             barRef.current = bar
             if (typeof ref === "function") {
